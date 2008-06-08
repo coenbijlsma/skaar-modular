@@ -1,12 +1,16 @@
-#include "stringtokenizer.h"
+#include "StringTokenizer.h"
 
-StringTokenizer::StringTokenizer(char* seq, char delim){
+StringTokenizer::StringTokenizer(std::string seq, char delim){
     char* ptr;
-    if(seq == 0){
+    if(seq.c_str() == '\0'){
 	fprintf(stderr, "The sequence to be checked cannot be NULL\n");
 	return;
     }else{
-	_sequence = seq;
+	char* _tmp = (char*)malloc(seq.size() +1);
+	memset(_tmp, 0, seq.size() +1);
+	
+	strcpy(_tmp, seq.c_str());
+	_sequence = _tmp;
     }
     
     if(delim == 0){
@@ -17,15 +21,15 @@ StringTokenizer::StringTokenizer(char* seq, char delim){
 
     _currentLoc = 0;
     _currentToken = 0;
-    if( (ptr = strchr(seq, delim)) == 0){
-	_nextToken = (char*)malloc(strlen(seq) +1);
-	memset(_nextToken, 0, strlen(seq) +1);
-	strcpy(_nextToken, seq);
+    if( (ptr = strchr(_sequence, delim)) == 0){
+	_nextToken = (char*)malloc(strlen(_sequence) +1);
+	memset(_nextToken, 0, strlen(_sequence) +1);
+	strcpy(_nextToken, _sequence);
     }else{
-	_nextToken = (char*)malloc(ptr - seq + 1);
-	memset(_nextToken, 0, ptr - seq + 1);
-	strncpy(_nextToken, seq, ptr - seq);
-	_currentLoc = ptr - seq;
+	_nextToken = (char*)malloc(ptr - _sequence + 1);
+	memset(_nextToken, 0, ptr - _sequence + 1);
+	strncpy(_nextToken, _sequence, ptr - _sequence);
+	_currentLoc = ptr - _sequence;
     }
     
 }
@@ -35,11 +39,11 @@ StringTokenizer::~StringTokenizer(){
     free(_nextToken);
 }
 
-int StringTokenizer::hasNext(){
+bool StringTokenizer::hasNext(){
     if(_nextToken == 0){
-	return 0;
+	return false;
     }
-    return 1;
+    return true;
 }
 
 int StringTokenizer::count(){
@@ -94,7 +98,7 @@ char* StringTokenizer::next(){
 	    memset(_nextToken, 0, ptr2 - ptr + 1);
 	    strncpy(_nextToken, ptr, ptr2 - ptr);
 	}
-	_currentLoc += strlen(_nextTokenOH) + 1;
+	_currentLoc += strlen(_nextToken) + 1;
     }
     
     retval = (char*)malloc(strlen(_currentToken) +1);

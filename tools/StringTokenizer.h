@@ -3,7 +3,10 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <string>
 #include <stdlib.h>
+
+using namespace std;
 
 class StringTokenizer {
     char* 	_sequence;
@@ -13,8 +16,8 @@ class StringTokenizer {
     char* 	_nextToken;
     
 public:
-    Stringtokenizer(char* seq, char delim);
-    ~Stringtokenizer();
+    StringTokenizer(string seq, char delim);
+    ~StringTokenizer();
     
     bool hasNext();
     int count();

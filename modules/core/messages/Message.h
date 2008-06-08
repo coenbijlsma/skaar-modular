@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "../../../tools/StringTokenizer.h"
 #include "../connection/IRCConnection.h"
 #include "../user/User.h"
 #include "../main/Channel.h"
@@ -22,14 +23,13 @@ protected:
     
     void _init(){
 	if(_raw.at(0) == '/'){
-	    string::size_type space_location = _raw.find(" ", 0);
-	    StringTokenizer st(_raw.data(), ' ');
+	    StringTokenizer st(_raw, ' ');
 	    
 	    // Set the command
-	    _command = st.next().substr(1);
+	    _command = string(st.next()).substr(1);
 	    
 	    // Insert the parameters
-	    while(st.nasNext()){
+	    while(st.hasNext()){
 		string _tmp(st.next());
 		
 		/* 
@@ -56,9 +56,9 @@ protected:
     }
     
 public:
-    Message(string raw);
+
     virtual ~Message();
-    
+        
     /*
      * Translates the raw string given during 
      * construction to a string that is fully 
