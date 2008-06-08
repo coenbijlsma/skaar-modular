@@ -65,7 +65,7 @@ public:
  * definitions, but only functions. These functions
  * take care of constructing an destructing objects.
  */
-typedef IRCConnection* create_t(char* h, int p);
-typedef void destroy_t(IRCConnection*);
+typedef IRCConnection* create_connection(char* h, int p);
+typedef void destroy_connection(IRCConnection*);
 
 #endif

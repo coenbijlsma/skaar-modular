@@ -100,7 +100,7 @@ public:
     virtual bool reInit(string raw)  =0;
 };
 
-typedef Message* create_t(string raw);
-typedef void destroy_t(Message *);
+typedef Message* create_message(string raw);
+typedef void destroy_message(Message *);
 
 #endif
