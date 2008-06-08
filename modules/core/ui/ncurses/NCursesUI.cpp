@@ -1,5 +1,6 @@
 #include <string>
 #include <ncurses.h>
+#include <limits.h>
 
 #include "../VirtualUI.h"
 
@@ -25,9 +26,9 @@ public:
     }
     
     string readline(){
-	char str[IRC_MAX_LINE];
+	char str[LINE_MAX];
 	if(getstr(str) != OK){
-	    return "";
+	    return NULL;
 	}else{
 	    return string(str);
 	}
