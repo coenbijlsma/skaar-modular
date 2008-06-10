@@ -1,54 +1,50 @@
-#include "Message.h"
+#include "QuitMessage.h"
 
-class QuitMessage : public Message {
+QuitMessage::QuitMessage(string raw){
+    _raw = raw;
+    _init();
+}
 
-public:
-    QuitMessage(string raw){
-        _raw = raw;
-        _init();
-    }
+QuitMessage::~QuitMessage(){}
 
-    ~QuitMessage(){}
-    
-    string translate(){
-        return "";
-    }
+string QuitMessage::translate(){
+    return "";
+}
 
-    const string command(){
-        return _command;
-    }
+const string QuitMessage::command(){
+    return _command;
+}
 
-    const vector<string> params(){
-        return _params;
-    }
+const vector<string> QuitMessage::params(){
+    return _params;
+}
 
-    bool setUser(User* user){
-        _user = user;
-        return true;
-    }	
-    
-    bool setChannel(Channel* channel){
-        _channel = channel;
-        return true;
-    }
+bool QuitMessage::setUser(User* user){
+    _user = user;
+    return true;
+}	
 
-    bool transmit(IRCConnection* conn){
-        // XXX
-        return true;
-    }
+bool QuitMessage::setChannel(Channel* channel){
+    _channel = channel;
+    return true;
+}
 
-    bool reInit(string raw){
-        _raw = raw;
-        _init();
-        return true;
-    }
+bool QuitMessage::transmit(IRCConnection* conn){
+    // XXX
+    return true;
+}
 
-};
+bool QuitMessage::reInit(string raw){
+    _raw = raw;
+    _init();
+    return true;
+}
 
-extern "C" Message* create(string raw){
+
+extern "C" QuitMessage* create_qmessage(string raw){
     return new QuitMessage(raw);
 }
 
-extern "C" void destroy(Message* message){
+extern "C" void destroy_qmessage(QuitMessage* message){
     delete message;
 }

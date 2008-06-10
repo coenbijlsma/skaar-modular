@@ -104,3 +104,13 @@ char* StringTokenizer::next(){
     strcpy(retval, _currentToken);
     return retval;
 }
+
+// CLASS FACTORIES
+
+extern "C" StringTokenizer* create_tokenizer(string seq, char delim){
+    return new StringTokenizer(seq, delim);
+}
+
+extern "C" void destroy_tokenizer(StringTokenizer* st){
+    delete st;
+}
