@@ -6,10 +6,10 @@
 #include <string>
 #include <vector>
 
-#include "../../tools/StringTokenizer.h"
-#include "../connection/IRCConnection.h"
-#include "../user/User.h"
-#include "../main/Channel.h"
+#include "../../../tools/StringTokenizer.h"
+#include "../../connection/IRCConnection.h"
+#include "../../user/User.h"
+#include "../../main/Channel.h"
 
 using namespace std;
 
