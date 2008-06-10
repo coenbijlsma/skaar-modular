@@ -1,6 +1,10 @@
 #include "User.h"
 
 User::User(string username, string nick, string password){
+    _username	= username;
+    _nick	= nick;
+    _prevNick	= nick;
+    _password	= password;
 }
 
 User::~User(){}

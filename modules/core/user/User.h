@@ -25,6 +25,6 @@ public:
 
 // CLASS FACTORIES
 typedef User* create_user(string username, string nick, string password);
-typedef void destroy_user();
+typedef void destroy_user(User*);
 
 #endif
