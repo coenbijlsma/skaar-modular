@@ -1,12 +1,14 @@
 
 INSTALLDIR=/usr/local/lib
 LIBNAME=libskaaruser.so
+VERSION=1
+MINOR=0
 COMPILER=g++
 
 help:
 	@echo "Usage:"
-	@echo "make build	Builds the module $(LIBNAME).1.0"
-	@echo "make install	Builds and installs the module."
+	@echo "make build	Builds the module $(LIBNAME).$(VERSION).$(MINOR)"
+	@echo "make install	Builds and installs the module in $(INSTALLDIR)."
 	@echo "		You need root privileges for this."
 	@echo "make uninstall	Removes the module and it's symlinks."
 	@echo "		For this you also need root privileges."
@@ -16,12 +18,12 @@ help:
 
 build: 
 	$(COMPILER) -fPIC -g -c -Wall -combine User.h User.cpp
-	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).1 -o $(LIBNAME).1.0 User.o -lc
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -o $(LIBNAME).$(VERSION).$(MINOR) User.o -lc
 
 install: indeedroot build
-	cp $(LIBNAME).1.0 $(INSTALLDIR)
+	cp $(LIBNAME).$(VERSION).$(MINOR) $(INSTALLDIR)
 	ldconfig $(INSTALLDIR)
-	ln -sf $(INSTALLDIR)/$(LIBNAME).1 $(INSTALLDIR)/$(LIBNAME)
+	ln -sf $(INSTALLDIR)/$(LIBNAME).$(VERSION) $(INSTALLDIR)/$(LIBNAME)
 
 uninstall: indeedroot
 	@rm $(INSTALLDIR)/$(LIBNAME)*

@@ -1,14 +1,17 @@
 
 INSTALLDIR=/usr/local/lib
 LIBNAME=libskaartools.so
+VERSION=1
+MINOR=0
 COMPILER=g++
 
 help:
 	@echo "Usage:"
-	@echo "make build	Builds the module $(LIBNAME).1.0"
-	@echo "make install	Builds and installs the module. Needs root privileges."
-	@echo "make uninstall	Removes the module and its symlinks. This"
-	@echo "		also needs root privileges."
+	@echo "make build	Builds the module $(LIBNAME).$(VERSION).$(MINOR)"
+	@echo "make install	Builds and installs the module in $(INSTALLDIR)."
+	@echo "		You need root privileges to do this."
+	@echo "make uninstall	Removes the module and its symlinks."
+	@echo "		This also needs root privileges."
 	@echo "make clean	Cleans up this directory."
 	@echo "make help	Shows this message."
 	@echo
@@ -17,12 +20,12 @@ help:
 
 build:
 	$(COMPILER) -fPIC -g -c -Wall -combine StringTokenizer.h StringTokenizer.cpp
-	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).1 -o $(LIBNAME).1.0 StringTokenizer.o -lc
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -o $(LIBNAME).$(VERSION).$(MINOR) StringTokenizer.o -lc
 
 install: indeedroot build
-	cp $(LIBNAME).1.0 $(INSTALLDIR)
+	cp $(LIBNAME).$(VERSION).$(MINOR) $(INSTALLDIR)
 	ldconfig $(INSTALLDIR)
-	ln -sf $(INSTALLDIR)/$(LIBNAME).1 $(INSTALLDIR)/$(LIBNAME)
+	ln -sf $(INSTALLDIR)/$(LIBNAME).$(VERSION) $(INSTALLDIR)/$(LIBNAME)
 
 uninstall: indeedroot
 	@rm $(INSTALLDIR)/$(LIBNAME)*

@@ -29,10 +29,10 @@ public:
 };
 
 // CLASS FACTORIES
-extern "C" VirtualUI* create(){
+extern "C" VirtualUI* create_ui(){
     return (VirtualUI*) new DefaultUI();
 }
 
-extern "C" void destroy(VirtualUI* ui){
+extern "C" void destroy_ui(VirtualUI* ui){
     delete ui;
 }

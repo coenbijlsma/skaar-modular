@@ -1,12 +1,15 @@
 
 INSTALLDIR=/usr/local/lib
 LIBNAME=libquitmessage.so
+VERSION=1
+MINOR=0
 COMPILER=g++
 
 help:
 	@echo "Usage:" 
-	@echo "make build		Builds the module $(LIBNAME).1.0"
-	@echo "make install		Builds and installs the module. Needs root privileges."
+	@echo "make build		Builds the module $(LIBNAME).$(VERSION).$(MINOR)"
+	@echo "make install		Builds and installs the module in $(INSTALLDIR)."
+	@echo "			You needs root privileges for this."
 	@echo "make uninstall		Removes the installed module and it's symlinks."
 	@echo "			Also needs root privileges."
 	@echo "make clean		Cleans up the files created at build-time."
@@ -20,12 +23,12 @@ help:
 
 build:
 	$(COMPILER) -fPIC -g -c -Wall -Wl,export-dynamic -combine ../../../tools/StringTokenizer.h QuitMessage.h QuitMessage.cpp
-	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).1 -lircconnection -lskaaruser -lircchannel -lskaartools -o $(LIBNAME).1.0 QuitMessage.o -lc
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -lircconnection -lskaaruser -lircchannel -lskaartools -o $(LIBNAME).$(VERSION).$(MINOR) QuitMessage.o -lc
 
 install: indeedroot build
-	cp $(LIBNAME).1.0 $(INSTALLDIR)
+	cp $(LIBNAME).$(VERSION).$(MINOR) $(INSTALLDIR)
 	ldconfig $(INSTALLDIR)
-	ln -sf $(INSTALLDIR)/$(LIBNAME).1 $(INSTALLDIR)/$(LIBNAME)
+	ln -sf $(INSTALLDIR)/$(LIBNAME).$(VERSION) $(INSTALLDIR)/$(LIBNAME)
 
 uninstall: indeedroot
 	@rm $(INSTALLDIR)/$(LIBNAME)*

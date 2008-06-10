@@ -14,7 +14,7 @@ public:
     virtual string 	readline() =0;    
 };
 
-typedef VirtualUI* create_t();
-typedef void destroy_t(VirtualUI*);
+typedef VirtualUI* create_ui_t();
+typedef void destroy_ui_t(VirtualUI*);
 
 #endif
