@@ -16,11 +16,11 @@ help:
 	@echo "make help		Shows this message"
 	@echo
 	@echo "Dependencies:"
-	@echo "libircconnection, libskaartools"
+	@echo "libircconnection, libskaaruser, libskaartools"
 
 build:
 	$(COMPILER) -fPIC -g -c -Wall -Wl,export-dynamic -combine ../../../tools/StringTokenizer.h QuitMessage.h QuitMessage.cpp
-	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).1 -lircconnection -lskaartools -o $(LIBNAME).1.0 QuitMessage.o -lc
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).1 -lircconnection -lskaaruser -lskaartools -o $(LIBNAME).1.0 QuitMessage.o -lc
 
 install: indeedroot build
 	cp $(LIBNAME).1.0 $(INSTALLDIR)

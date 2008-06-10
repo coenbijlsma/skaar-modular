@@ -1,6 +1,6 @@
 
 INSTALLDIR=/usr/local/lib
-LIBNAME=libuser.so
+LIBNAME=libskaaruser.so
 COMPILER=g++
 
 help:
