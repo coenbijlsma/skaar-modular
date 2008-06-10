@@ -5,7 +5,7 @@ COMPILER=g++
 
 help:
 	@echo "Usage:"
-	@echo "make build	Builds the module libskaartools.so.1.0"
+	@echo "make build	Builds the module $(LIBNAME).1.0"
 	@echo "make install	Builds and installs the module. Needs root privileges."
 	@echo "make uninstall	Removes the module and its symlinks. This"
 	@echo "		also needs root privileges."

@@ -5,7 +5,7 @@ COMPILER=g++
 
 help:
 	@echo "Usage:"
-	@echo "make build	Builds the module libuser.so.1.0"
+	@echo "make build	Builds the module $(LIBNAME).1.0"
 	@echo "make install	Builds and installs the module."
 	@echo "		You need root privileges for this."
 	@echo "make uninstall	Removes the module and it's symlinks."

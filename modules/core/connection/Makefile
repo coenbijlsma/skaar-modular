@@ -5,7 +5,7 @@ COMPILER=g++
 
 help:
 	@echo "Usage:"
-	@echo "make build	Builds the library libircconnection.so.1.0"
+	@echo "make build	Builds the library $(LIBNAME).1.0"
 	@echo "make install	Builds and installs the library."
 	@echo "		Needs root privileges to run."
 	@echo "make uninstall	Removes the library and it's symlinks."
