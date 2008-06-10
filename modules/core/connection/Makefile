@@ -1,6 +1,7 @@
 
 INSTALLDIR=/usr/local/lib
 LIBNAME=libircconnection.so
+COMPILER=g++
 
 help:
 	@echo "Usage:"
@@ -14,8 +15,8 @@ help:
 	@echo
 
 build:
-	g++ -fPIC -g -c -Wall -combine IRCConnection.h IRCConnection.cpp
-	g++ -shared -Wl,-soname,$(LIBNAME).1 -o $(LIBNAME).1.0 IRCConnection.o -lc
+	$(COMPILER) -fPIC -g -c -Wall -combine IRCConnection.h IRCConnection.cpp
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).1 -o $(LIBNAME).1.0 IRCConnection.o -lc
 
 install: indeedroot build
 	cp $(LIBNAME).1.0 $(INSTALLDIR)

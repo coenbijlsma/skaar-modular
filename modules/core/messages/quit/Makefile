@@ -1,6 +1,7 @@
 
 INSTALLDIR=/usr/local/lib
 LIBNAME=libquitmessage.so
+COMPILER=g++
 
 help:
 	@echo "Usage:" 
@@ -18,8 +19,8 @@ help:
 	@echo "libircconnection, libskaartools"
 
 build:
-	g++ -fPIC -g -c -Wall -Wl,export-dynamic -combine ../../../tools/StringTokenizer.h QuitMessage.h QuitMessage.cpp
-	g++ -shared -Wl,-soname,$(LIBNAME).1 -lircconnection -lskaartools -o $(LIBNAME).1.0 QuitMessage.o -lc
+	$(COMPILER) -fPIC -g -c -Wall -Wl,export-dynamic -combine ../../../tools/StringTokenizer.h QuitMessage.h QuitMessage.cpp
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).1 -lircconnection -lskaartools -o $(LIBNAME).1.0 QuitMessage.o -lc
 
 install: indeedroot build
 	cp $(LIBNAME).1.0 $(INSTALLDIR)

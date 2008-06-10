@@ -1,6 +1,7 @@
 
 INSTALLDIR=/usr/local/lib
 LIBNAME=libskaartools.so
+COMPILER=g++
 
 help:
 	@echo "Usage:"
@@ -15,8 +16,8 @@ help:
 	@echo "none"
 
 build:
-	g++ -fPIC -g -c -Wall -combine StringTokenizer.h StringTokenizer.cpp
-	g++ -shared -Wl,-soname,$(LIBNAME).1 -o $(LIBNAME).1.0 StringTokenizer.o -lc
+	$(COMPILER) -fPIC -g -c -Wall -combine StringTokenizer.h StringTokenizer.cpp
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).1 -o $(LIBNAME).1.0 StringTokenizer.o -lc
 
 install: indeedroot build
 	cp $(LIBNAME).1.0 $(INSTALLDIR)
