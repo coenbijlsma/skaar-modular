@@ -80,7 +80,7 @@ public:
     /*
      * Sets the User that sends this message
      */
-    virtual bool setUser(User* user) =0;
+     virtual bool setUser(User* user) =0;
     
     /*
      * Sets the channel this message 
@@ -97,10 +97,10 @@ public:
      * Re-initializes the message with new
      * contents.
      */
-    virtual bool reInit(string raw)  =0;
+    virtual bool reInit(string raw) =0;
 };
 
-typedef Message* create_message(string raw);
-typedef void destroy_message(Message *);
+typedef Message* create_t(string);
+typedef void destroy_t(Message*);
 
 #endif

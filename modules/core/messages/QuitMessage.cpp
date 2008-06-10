@@ -4,12 +4,12 @@ class QuitMessage : public Message {
 
 public:
     QuitMessage(string raw){
-	_raw = raw;
+        _raw = raw;
         _init();
     }
 
     ~QuitMessage(){}
-
+    
     string translate(){
         return "";
     }
@@ -24,31 +24,31 @@ public:
 
     bool setUser(User* user){
         _user = user;
-	return true;
-    }
-
+        return true;
+    }	
+    
     bool setChannel(Channel* channel){
         _channel = channel;
-	return true;
+        return true;
     }
 
     bool transmit(IRCConnection* conn){
         // XXX
-	return true;
+        return true;
     }
 
     bool reInit(string raw){
         _raw = raw;
         _init();
-	return true;
+        return true;
     }
+
 };
 
 extern "C" Message* create(string raw){
-    return (Message*) new QuitMessage(raw);
+    return new QuitMessage(raw);
 }
 
 extern "C" void destroy(Message* message){
     delete message;
 }
-

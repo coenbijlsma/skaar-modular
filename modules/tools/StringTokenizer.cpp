@@ -47,7 +47,6 @@ bool StringTokenizer::hasNext(){
 }
 
 int StringTokenizer::count(){
-    int i;
     int tok = 1;
     
     for(int i = 0; i <= strlen(_sequence); i++){
@@ -62,7 +61,6 @@ char* StringTokenizer::next(){
     char* ptr;
     char* ptr2;
     char* retval;
-    int i;
     
     if(_nextToken == 0){
 	return 0;
