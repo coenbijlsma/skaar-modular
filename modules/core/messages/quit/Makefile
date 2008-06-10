@@ -44,6 +44,6 @@ indeedroot:
 	fi
 
 test: install
-	g++ -combine QuitMessage.h main.cpp -rdynamic -ldl -lquitmessage -o main -v
+	$(COMPILER) -combine QuitMessage.h main.cpp -rdynamic -ldl -lquitmessage -o main -v
 
 .PHONY: help build install uninstall clean indeedroot test
