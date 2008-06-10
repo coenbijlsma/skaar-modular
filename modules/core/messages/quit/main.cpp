@@ -2,12 +2,14 @@
 
 #include <string>
 #include <iostream>
-#include <dlfcn.h>
+//#include <dlfcn.h>
 
 using namespace std;
 
 
 int main(int argc, char** argv){
+
+/*
     void* message = dlopen("/usr/local/lib/libquitmessage.so", RTLD_LAZY);
     
     cout << "Library loaded" << endl;
@@ -35,16 +37,16 @@ int main(int argc, char** argv){
     }
     
     cout << "All loaded" << endl;
-    
+*/    
     try{
-	QuitMessage* msg = create_msg("Ik ben weg");
-	destroy_msg(msg);
+	QuitMessage* msg = new QuitMessage("Ik ben weg");
+//	destroy_msg(msg);
     }catch(string msg){
 	cerr << "Error: " << msg << endl;
-	dlclose(message);
+//	dlclose(message);
 	return 1;
     }
     
-    dlclose(message);
+//    dlclose(message);
 }
 
