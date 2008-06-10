@@ -13,8 +13,10 @@ public:
     Channel(string name);
     ~Channel();
     
-    string getName();
+    const string getName();
 };
 
+typedef Channel* create_channel_t(string);
+typedef void destroy_channel_t(Channel*);
 
 #endif

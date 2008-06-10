@@ -33,7 +33,6 @@ clean:
 	rm *.gch
 	rm *.o
 	rm *.so*
-	rm main
 
 indeedroot:
 	@if [ `whoami` != "root" ] ; then \
