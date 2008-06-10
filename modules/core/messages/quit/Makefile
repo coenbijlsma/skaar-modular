@@ -13,10 +13,12 @@ help:
 	@echo "			This option also requires root privileges."
 	@echo "make help		Shows this message"
 	@echo
+	@echo "Dependencies:"
+	@echo "libskaartools"
 
 build:
-	g++ -fPIC -g -c -Wall -Wl,export-dynamic -combine ../../../tools/StringTokenizer.h ../../../tools/StringTokenizer.cpp QuitMessage.h QuitMessage.cpp
-	g++ -shared -Wl,-soname,libquitmessage.so.1 -o libquitmessage.so.1.0 QuitMessage.o StringTokenizer.o -lc
+	g++ -fPIC -g -c -Wall -Wl,export-dynamic -combine ../../../tools/StringTokenizer.h QuitMessage.h QuitMessage.cpp
+	g++ -shared -Wl,-soname,libquitmessage.so.1 -lskaartools -o libquitmessage.so.1.0 QuitMessage.o -lc
 
 install: indeedroot build
 	cp libquitmessage.so.1.0 $(INSTALLDIR)
