@@ -1,5 +1,6 @@
 
 INSTALLDIR=/usr/local/lib
+LIBNAME=libquitmessage.so
 
 help:
 	@echo "Usage:" 
@@ -14,19 +15,19 @@ help:
 	@echo "make help		Shows this message"
 	@echo
 	@echo "Dependencies:"
-	@echo "libskaartools"
+	@echo "libircconnection, libskaartools"
 
 build:
 	g++ -fPIC -g -c -Wall -Wl,export-dynamic -combine ../../../tools/StringTokenizer.h QuitMessage.h QuitMessage.cpp
-	g++ -shared -Wl,-soname,libquitmessage.so.1 -lskaartools -o libquitmessage.so.1.0 QuitMessage.o -lc
+	g++ -shared -Wl,-soname,$(LIBNAME).1 -lircconnection -lskaartools -o $(LIBNAME).1.0 QuitMessage.o -lc
 
 install: indeedroot build
-	cp libquitmessage.so.1.0 $(INSTALLDIR)
+	cp $(LIBNAME).1.0 $(INSTALLDIR)
 	ldconfig $(INSTALLDIR)
-	ln -sf $(INSTALLDIR)/libquitmessage.so.1 $(INSTALLDIR)/libquitmessage.so
+	ln -sf $(INSTALLDIR)/$(LIBNAME).1 $(INSTALLDIR)/$(LIBNAME)
 
 uninstall: indeedroot
-	@rm $(INSTALLDIR)/libquitmessage.so*
+	@rm $(INSTALLDIR)/$(LIBNAME)*
 	ldconfig $(INSTALLDIR)
 
 clean:

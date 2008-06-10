@@ -23,7 +23,7 @@ IRCConnection::IRCConnection(char* host, int port){
 IRCConnection::~IRCConnection(){
     if(_connected){
 	if(shutdown(_fd, SHUT_RDWR) == -1){
-	    perror("shutdown 0");
+	    perror("shutdown (during destruction)");
 	}else{
 	    _connected = false;
 	    if(close(_fd) == -1){
@@ -67,7 +67,7 @@ bool IRCConnection::disconnect(){
     }
     
     if(shutdown(_fd, SHUT_RDWR) == -1){
-	perror("shutdown 1");
+	perror("shutdown (during disconnect)");
 	return false;
     }
     
@@ -81,18 +81,18 @@ bool IRCConnection::disconnect(){
     return true;
 }
 
-bool IRCConnection::sendMessage(char* msg){
+bool IRCConnection::sendMessage(string msg){
     if( ! _connected){
 	createConnection();
     }
     
     int bytes_sent;
     
-    if(msg[strlen(msg)] != '\0'){
-	msg[strlen(msg)] = '\0';
+    if(msg[strlen(msg.c_str())] != '\0'){
+	msg = msg + '\0';
     }
     
-    if( (bytes_sent = send(_fd, msg, strlen(msg), 0)) == -1 || bytes_sent != strlen(msg) ){
+    if( (bytes_sent = send(_fd, msg.c_str(), strlen(msg.c_str()), 0)) == -1 || bytes_sent != strlen(msg.c_str()) ){
 	perror("send");
 	return false;
     }

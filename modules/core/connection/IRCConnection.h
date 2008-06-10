@@ -5,6 +5,7 @@
 #ifndef IRCCONNECTION_H
 #define IRCCONNECTION_H
 
+#include <string>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
@@ -15,6 +16,8 @@
 #include <netdb.h>
 
 #define DEFAULT_PORT 6667
+
+using namespace std;
 
 /*
  * This is the header file for the library libircconnection.so.1.0 .
@@ -52,7 +55,7 @@ public:
     /*
      * Sends a message to the server.
      */
-    bool 	sendMessage(char* msg);
+    bool 	sendMessage(string msg);
     
     /*
      * Retrieves a message from the server

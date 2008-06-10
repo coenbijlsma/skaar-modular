@@ -1,5 +1,6 @@
 
 INSTALLDIR=/usr/local/lib
+LIBNAME=libskaartools.so
 
 help:
 	@echo "Usage:"
@@ -15,15 +16,15 @@ help:
 
 build:
 	g++ -fPIC -g -c -Wall -combine StringTokenizer.h StringTokenizer.cpp
-	g++ -shared -Wl,-soname,libskaartools.so.1 -o libskaartools.so.1.0 StringTokenizer.o -lc
+	g++ -shared -Wl,-soname,$(LIBNAME).1 -o $(LIBNAME).1.0 StringTokenizer.o -lc
 
 install: indeedroot build
-	cp libskaartools.so.1.0 $(INSTALLDIR)
+	cp $(LIBNAME).1.0 $(INSTALLDIR)
 	ldconfig $(INSTALLDIR)
-	ln -sf $(INSTALLDIR)/libskaartools.so.1 $(INSTALLDIR)/libskaartools.so
+	ln -sf $(INSTALLDIR)/$(LIBNAME).1 $(INSTALLDIR)/$(LIBNAME)
 
 uninstall: indeedroot
-	@rm $(INSTALLDIR)/libskaartools.so*
+	@rm $(INSTALLDIR)/$(LIBNAME)*
 	ldconfig $(INSTALLDIR)
 
 clean:

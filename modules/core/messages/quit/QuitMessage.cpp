@@ -7,8 +7,32 @@ QuitMessage::QuitMessage(string raw){
 
 QuitMessage::~QuitMessage(){}
 
+void QuitMessage::_init(){
+    if(_raw.at(0) == '/'){
+	StringTokenizer st(_raw, ' ');
+	string prm("");
+	
+	// Set the command
+	_command = string(st.next()).substr(1);
+	    
+	// Insert the parameter
+	while(st.hasNext()){
+	    prm = prm + st.next() + ' ';
+	}
+	
+	_params.push_back(prm);
+	    
+    }else{
+	throw "Invalid message: " + _raw;
+    }
+}
+
 string QuitMessage::translate(){
-    return "";
+    if(_params.size() > 0){
+	return "QUIT :" + _params.at(0) + CRLF;
+    }
+    
+    return string("QUIT :Leaving") + string(CRLF);
 }
 
 const string QuitMessage::command(){
@@ -30,14 +54,20 @@ bool QuitMessage::setChannel(Channel* channel){
 }
 
 bool QuitMessage::transmit(IRCConnection* conn){
-    // XXX
-    return true;
+    return conn->sendMessage(translate());
 }
 
 bool QuitMessage::reInit(string raw){
     _raw = raw;
-    _init();
-    return true;
+    
+    try{
+        _init();
+	return true;
+    }catch(string msg){
+	/* XXX Replace by logging */
+	cerr << "ERROR: " << msg << endl;
+	return false;
+    }
 }
 
 

@@ -3,6 +3,7 @@
 
 #define CRLF "\r\n"
 
+#include <iostream> // FOR DEBUG ONLY
 #include <string>
 #include <vector>
 
@@ -14,46 +15,14 @@
 using namespace std;
 
 class QuitMessage {
-protected:
+private:
     string 		_command;
     vector<string> 	_params;
     User*		_user;
     Channel*		_channel;
     string		_raw;
     
-    void _init(){
-	if(_raw.at(0) == '/'){
-	    StringTokenizer st(_raw, ' ');
-	    
-	    // Set the command
-	    _command = string(st.next()).substr(1);
-	    
-	    // Insert the parameters
-	    while(st.hasNext()){
-		string _tmp(st.next());
-		
-		/* 
-		 * Check if the parameter starts with
-		 * a colon, indicating a parameter 
-		 * that contains spaces.
-		 */
-		if(_tmp.at(0) == ':'){
-		    _params.push_back(_tmp);
-		    
-		    while(st.hasNext()){
-			_params.push_back(string(st.next()));
-		    }
-		    break;
-		}else{
-		    _params.push_back(_tmp);
-		}
-	    }
-	    
-	}else{
-	    throw "Invalid message: " + _raw;
-	}
-	
-    }
+    void		_init();
     
 public:
 
