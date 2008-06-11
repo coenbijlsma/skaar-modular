@@ -1,5 +1,5 @@
-#ifndef QUITMESSAGE_H
-#define QUITMESSAGE_H
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
 #define CRLF "\r\n"
 
@@ -11,23 +11,34 @@
 #include "../../connection/IRCConnection.h"
 #include "../../user/User.h"
 #include "../../main/Channel.h"
+#include "MessageFormat.h"
 
 using namespace std;
 
-class QuitMessage {
+class Message {
 private:
-    string 		_command;
-    vector<string> 	_params;
-    User*		_user;
-    Channel*		_channel;
-    string		_raw;
+    static vector<MessageFormat*> 	_registeredFormats;
+
+    string				_raw;
+    string				_prefix;
+    string				_command;
+    string				_friendly;
+    vector<string> 			_params;
+    unsigned int			_minparams;
+    User*				_user;
+    Channel*				_channel;
     
-    void		_init();
+    const static MessageFormat*		_getFormatFor(Message* m);
+    
+    void				_init();
+    void				_initUserMessage(StringTokenizer st);
+    void				_initPrefixMessage(StringTokenizer st);
+    void				_initNonPrefixMessage(StringTokenizer st);
     
 public:
 
-    QuitMessage(string raw);
-    virtual ~QuitMessage();
+    Message(string raw);
+    virtual ~Message();
         
     /*
      * Translates the raw string given during 
@@ -37,15 +48,33 @@ public:
     string translate();
     
     /*
+     * Returns the prefix of the message
+     */
+    const string prefix();
+    
+    /*
      * Returns the command of the message
      */
     const string command();
+    
+    /*
+     * Returns the friendly form of the
+     * command, if any.
+     */
+    const string friendly();
     
     /*
      * Returns the parameters that accompany 
      * this message.
      */
     const vector<string> params();
+    
+    /*
+     * Returns the minimum amount of parameters
+     * required for this message.
+     */
+    const unsigned int minParams();
+    
     
     /*
      * Sets the User that sends this message
@@ -64,13 +93,26 @@ public:
     bool transmit(IRCConnection* conn);
     
     /*
-     * Re-initializes the message with new
-     * contents.
+     * Registers the format for a message.
+     * This format contains the RFC command,
+     * the skaar friendly command, and the
+     * mimimum amount of parameters.
      */
-    bool reInit(string raw);
+    static void registerFormat(MessageFormat* mf);
+    
+    /*
+     * Unregisters the format for a message. If 
+     * a message is not registered, it cannot be sent.
+     */
+    static void unregisterFormat(MessageFormat* mf);
+
+    /*
+     * Checks if the supplied Message is registered.
+     */
+    static bool isRegistered(Message* m);
 };
 
-typedef QuitMessage* create_qmessage_t(string);
-typedef void destroy_qmessage_t(QuitMessage*);
+typedef Message* create_message_t(string raw);
+typedef void destroy_message_t(Message*);
 
 #endif

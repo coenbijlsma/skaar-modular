@@ -6,10 +6,10 @@
 #include <map>
 #include <vector>
 
-#include "../ui/VirtualUI.h" 			// The UI
-#include "../connection/IRCConnection.h" 	// The connection
-#include "../user/User.h"			// The user
-#include "../messages/Message.h"		// The messages
+#include "modules/core/ui/VirtualUI.h" 			// The UI
+#include "modules/core/connection/IRCConnection.h" 	// The connection
+#include "modules/core/user/User.h"			// The user
+#include "modules/core/messages/Message.h"		// The messages
 
 #define SKAAR_CONF "skaar.conf"
 #define SKAAR_MODS_CONF "skaar_mods.conf"
@@ -84,9 +84,5 @@ public:
     const User* getUser();
         
 };
-
-// CLASS FACTORIES
-typedef Skaar* create_t(string host, int port, bool autoConnect);
-typedef void destroy_t(Skaar*);
 
 #endif

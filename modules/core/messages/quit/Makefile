@@ -1,6 +1,6 @@
 
 INSTALLDIR=/usr/local/lib
-LIBNAME=libquitmessage.so
+LIBNAME=libmessage.so
 VERSION=1
 MINOR=0
 COMPILER=g++

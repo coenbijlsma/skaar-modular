@@ -1,80 +1,215 @@
-#include "QuitMessage.h"
+#include <stdlib.h>
 
-QuitMessage::QuitMessage(string raw){
-    _raw = raw;
+#include "Message.h"
+
+Message::Message(string raw){
+    _raw	= raw;
     _init();
 }
 
-QuitMessage::~QuitMessage(){}
+Message::~Message(){}
 
-void QuitMessage::_init(){
-    if(_raw.at(0) == '/'){
-	StringTokenizer st(_raw, ' ');
-	string prm("");
+MessageFormat* Message::_getFormatFor(Message* m){
+    for(int i = 0; i < _registeredFormats.size(); i++){
+	MessageFormat* mf = _registeredFormats.at(i);
 	
-	// Set the command
-	_command = string(st.next()).substr(1);
-	    
-	// Insert the parameter
-	while(st.hasNext()){
-	    prm = prm + st.next() + ' ';
+	if( ! m->friendly().empty() ){
+	    if(mf->friendly() == m->friendly()){
+		return mf;
+	    }
+	}else if( ! m->command().empty() ){
+	    if(mf->command() == m->friendly()){
+		return mf;
+	    }
 	}
-	
-	_params.push_back(prm);
-	    
+    }
+    return 0;
+}
+
+void Message::_init(){
+    StringTokenizer st(_raw, ' ');
+    
+    if(_raw.at(0) == '/'){
+	_initUserMessage(st);
+    }else if(_raw.at(0) == ':'){
+	_initPrefixMessage(st); 
     }else{
-	throw "Invalid message: " + _raw;
+	_initNonPrefixMessage(st);
     }
 }
 
-string QuitMessage::translate(){
-    if(_params.size() > 0){
-	return "QUIT :" + _params.at(0) + CRLF;
+void Message::_initUserMessage(StringTokenizer st){
+    /*
+     * Message needs to be translated from
+     * a user-entered format.
+     */
+    string _tmp("");
+	
+    // Set the friendly command
+    _friendly = string(st.next()).substr(1);
+    
+    // Check if the message is registered
+    MessageFormat* mf = _getFormatFor(this);
+    
+    if(mf == 0){
+	throw "Unregistered message: " + _friendly + ".";
+    }else{
+	_minparams 	= mf->minParams();
+	_command 	= mf->command();
     }
     
-    return string("QUIT :Leaving") + string(CRLF);
+    // Insert the parameter(s)
+    while(st.hasNext()){
+	_tmp = string(st.next());
+	
+	if(_tmp.at(0) == ':'){
+	    _tmp = _tmp.substr(1);
+	    
+	    while(st.hasNext()){
+		_tmp = _tmp.append(" ");
+		_tmp = _tmp.append(st.next());
+	    }
+	    _params.push_back(_tmp);
+	    
+	    break;
+	}else{
+	    _params.push_back(_tmp);
+	}
+    }
+	
+    // Check for the minimum amount of params
+    if(_params.size() < _minparams){
+	throw "You supplied not enough parameters (" + string(itoa(_params.size())) + "), I expected at least " + string(itoa(_minparams)) + ".";
+    }
 }
 
-const string QuitMessage::command(){
+void Message::_initPrefixMessage(Stringtokenizer st){
+    
+    if( ! st.hasNext()){
+	throw "Message contains nog enough parameters!";
+    }
+	
+    string _tmp = string(st.next());
+    _prefix = _tmp.substr(1);
+    _command = string(st.next());
+	
+    while(st.hasNext()){
+	_tmp = string(st.next());
+	    
+	if(_tmp.at(0) == ':'){
+	    /*
+	     * If the token starts with ':', 
+	     * the following tokens all belong to 
+	     * the current parameter.
+	     */
+	    _tmp = _tmp.substr(1);
+		
+	    while(st.hasNext()){
+		_tmp = _tmp.append(" ");
+		_tmp = _tmp.append(st.next()); 
+	    }
+	    _params.push_back(_tmp);
+		
+	    // Stop looping
+	    break;
+	}else{
+	    _params.push_back(_tmp);
+	}
+    } // while(st.hasNext())	
+}
+
+void Message::_initNonPrefixMessage(StringTokenizer st){
+    throw "Not yet implemented";
+}
+
+
+string Message::translate(){
+    string _tmp("");
+    
+    if( ! _prefix.empty()){
+	_tmp = _tmp.append(":");
+	_tmp = _tmp.append(_prefix);
+    }
+    
+    _tmp = _tmp.append(" ");
+    _tmp = _tmp.append(_command);
+    
+    for(int i = 0; i < _params.size(); i++){
+	string _param = _params.at(i);
+	
+    return _command + string(" :Leaving") + string(CRLF);
+}
+
+const string Message::prefix(){
+    return _prefix;
+}
+
+const string Message::command(){
     return _command;
 }
 
-const vector<string> QuitMessage::params(){
+const string Message::friendly(){
+    return _friendly;
+}
+
+const vector<string> Message::params(){
     return _params;
 }
 
-bool QuitMessage::setUser(User* user){
+const unsigned int Message::minParams(){
+    return _minparams;
+}
+
+bool Message::setUser(User* user){
     _user = user;
     return true;
 }	
 
-bool QuitMessage::setChannel(Channel* channel){
+bool Message::setChannel(Channel* channel){
     _channel = channel;
     return true;
 }
 
-bool QuitMessage::transmit(IRCConnection* conn){
-    return conn->sendMessage(translate());
-}
-
-bool QuitMessage::reInit(string raw){
-    _raw = raw;
-    
-    try{
-        _init();
-	return true;
-    }catch(string msg){
-	/* XXX Replace by logging */
-	cerr << "ERROR: " << msg << endl;
-	return false;
+bool Message::transmit(IRCConnection* conn){
+    if(conn != 0){
+	return conn->sendMessage(translate());
+    }else{
+	throw "No connection available!";
     }
 }
 
-
-extern "C" QuitMessage* create_qmessage(string raw){
-    return new QuitMessage(raw);
+void Message::registerFormat(MessageFormat* mf){
+    for(int i = 0; i < _registeredFormats.size(); i++){
+	MessageFormat* _tmp = _registeredFormats.at(i);
+	if(mf->friendly() == _tmp->friendly() ){
+	    throw "A format is already registered for friendly " + mf->friendly() ".";
+	}
+	if(mf == _tmp){
+	    throw "This format is already registered."
+	}
+    }
+    
+    _registeredFormats.push_back(mf);    
 }
 
-extern "C" void destroy_qmessage(QuitMessage* message){
+void Message::unregisterFormat(MessageFormat* mf){
+    vector<MessageFormat*>::iterator iter;
+    
+    for(iter = _registeredFormats.begin(); iter != _registeredFormats.end(); iter++){
+	if(mf == iter){
+	    _registeredFormats.erase(iter);
+	}
+    }
+}
+
+bool Message::isRegistered(Message* m){
+    return (_getFormatFor(m) != 0);
+}
+
+extern "C" Message* create_message(string raw){
+    return new Message(raw);
+}
+
+extern "C" void destroy_message(Message* message){
     delete message;
 }
