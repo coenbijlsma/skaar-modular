@@ -38,9 +38,9 @@ int main(int argc, char** argv){
     cout << "All loaded" << endl;
 */    
     try{
-	string line("/quit Ik ben weg");
+	string line("/exit Ik ben weg");
 	
-	QuitMessage* msg = new QuitMessage("/quit Ik ben weg");
+	QuitMessage* msg = new QuitMessage(line);
 	
 	cout << msg->translate() << endl;
 //	destroy_msg(msg);

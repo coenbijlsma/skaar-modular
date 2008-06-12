@@ -4,7 +4,7 @@ LIBNAME=libncursesui.so
 VERSION=1
 MINOR=0
 COMPILER=g++
-HEADERSDIR=../../../../headers
+HEADERSDIR=../../../../include
 
 help:
 	@echo "make build	Builds the module $(LIBNAME).$(VERSION).$(MINOR)."

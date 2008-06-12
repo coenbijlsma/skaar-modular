@@ -1,6 +1,10 @@
 #ifndef QUITMESSAGE_H
 #define QUITMESSAGE_H
 
+#define QUITMESSAGE_COMMAND "QUIT"
+#define QUITMESSAGE_FRIENDLY "quit"
+#define QUITMESSAGE_MINPARAMS 0
+
 #include <iostream> // FOR DEBUG ONLY
 #include <string>
 #include <vector>
@@ -17,40 +21,27 @@ private:
 //				OBJECT VARIABLES			      //
 ////////////////////////////////////////////////////////////////////////////////
 
-    string				_raw;
-    vector<string>			_friendlies;
-    vector<string> 			_params;
-    User*				_user;
+    string			_raw;
+    vector<string> 		_params;
+    User*			_user;
     
-    void				_init();
-
-////////////////////////////////////////////////////////////////////////////////
-//				CLASS VARIABLES				      //
-////////////////////////////////////////////////////////////////////////////////
-
-    static const string			_command 	= "QUIT";    
-    static const unsigned int		_minparams 	= 0;
+    void			_init();
     
 public:
 
     QuitMessage(string raw);
     ~QuitMessage();
         
-    string translate();
-    
-    const string friendly();
-    
-    const string prefix();
-    
-    const vector<string> params();
-    
-    bool setUser(User* user);
-    
-    bool transmit(IRCConnection* conn);
+    string 			translate();
+    const string 		prefix();
+    const vector<string> 	params();
+    bool 			setUser(User* user);
+    bool 			transmit(IRCConnection* conn);
 
 
-    static const string 	command();
-    static const unsigned int 	minParams();
+    const string 		command();
+    const string		friendly();
+    const unsigned int 		minParams();
 };
 
 typedef QuitMessage* create_qmessage_t(string raw);

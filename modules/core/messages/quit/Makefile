@@ -4,7 +4,7 @@ LIBNAME=libquitmessage.so
 VERSION=1
 MINOR=0
 COMPILER=g++
-HEADERSDIR=../../../../headers
+HEADERSDIR=../../../../include
 
 help:
 	@echo "Usage:" 
@@ -41,7 +41,7 @@ uninstall: indeedroot
 clean:
 	rm *.o
 	rm *.so*
-	rm main
+	rm test
 
 distclean: uninstall clean
 
@@ -52,6 +52,6 @@ indeedroot:
 	fi
 
 test: install
-	$(COMPILER) -combine main.cpp -rdynamic -ldl -I$(HEADERSDIR) -lquitmessage -o main -v
+	$(COMPILER) -combine main.cpp -rdynamic -ldl -I$(HEADERSDIR) -lquitmessage -o test -v
 
 .PHONY: help build install uninstall clean distclean indeedroot test

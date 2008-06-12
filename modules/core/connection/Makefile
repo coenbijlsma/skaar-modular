@@ -4,7 +4,7 @@ LIBNAME=libircconnection.so
 VERSION=1
 MINOR=0
 COMPILER=g++
-HEADERSDIR=../../../headers
+HEADERSDIR=../../../include
 
 help:
 	@echo "Usage:"

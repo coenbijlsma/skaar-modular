@@ -8,8 +8,8 @@
 #include "User.h"
 #include "Channel.h"
 
-#ifndef MAXPARAMS
-#define MAXPARAMS 15
+#ifndef IRCMESSAGE_MAXPARAMS
+#define IRCMESSAGE_MAXPARAMS 15
 #endif
 
 #ifndef CRLF
@@ -24,15 +24,17 @@ protected:
 public:
     
     /*
-     * Translates the raw message
-     * to a RFC 1459 compliant string.
-     */
-    virtual string translate() =0;
-    
-    /*
      * Returns the command of the message
      */
     virtual const string command() =0;
+    
+    /*
+     * Returns the minimum amount of 
+     * parameters that this message needs.
+     * This is needed to validate the message
+     * before it gets out.
+     */
+    virtual const unsigned int minParams() =0;
     
     /*
      * Returns the friendly command of the
@@ -41,6 +43,12 @@ public:
      * by the user.
      */
     virtual const string friendly() =0;
+        
+    /*
+     * Translates the raw message
+     * to a RFC 1459 compliant string.
+     */
+    virtual string translate() =0;
     
     /*
      * Returns the prefix of the message.
@@ -55,14 +63,6 @@ public:
      * message contains.
      */
     virtual const vector<string> params() =0;
-    
-    /*
-     * Returns the minimum amount of 
-     * parameters that this message needs.
-     * This is needed to validate the message
-     * before it gets out.
-     */
-    virtual const unsigned int minParams() =0;
     
     /*
      * Sets the user who sends this message.
