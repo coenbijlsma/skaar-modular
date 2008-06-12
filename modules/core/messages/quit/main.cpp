@@ -1,11 +1,10 @@
-#include "QuitMessage.h"
-
 #include <string>
 #include <iostream>
 //#include <dlfcn.h>
 
-using namespace std;
+#include "QuitMessage.h"
 
+using namespace std;
 
 int main(int argc, char** argv){
 
@@ -41,7 +40,7 @@ int main(int argc, char** argv){
     try{
 	string line("/quit Ik ben weg");
 	
-	Message* msg = new Message("/quit Ik ben weg");
+	QuitMessage* msg = new QuitMessage("/quit Ik ben weg");
 	
 	cout << msg->translate() << endl;
 //	destroy_msg(msg);

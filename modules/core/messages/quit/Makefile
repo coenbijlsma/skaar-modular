@@ -1,6 +1,6 @@
 
 INSTALLDIR=/usr/local/lib
-LIBNAME=libmessage.so
+LIBNAME=libquitmessage.so
 VERSION=1
 MINOR=0
 COMPILER=g++
@@ -22,8 +22,9 @@ help:
 	@echo "libircconnection, libskaaruser, libircchannel, libskaartools"
 
 build:
-	$(COMPILER) -fPIC -g -c -Wall -Wl,export-dynamic -combine ../../../tools/StringTokenizer.h QuitMessage.h QuitMessage.cpp
+	$(COMPILER) -fPIC -g -c -Wall QuitMessage.cpp -I../ -I../../../tools -I../../user -I../../connection -I../../channel
 	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -lircconnection -lskaaruser -lircchannel -lskaartools -o $(LIBNAME).$(VERSION).$(MINOR) QuitMessage.o -lc
+#	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -o $(LIBNAME).$(VERSION).$(MINOR) QuitMessage.o -lc
 
 install: indeedroot build
 	cp $(LIBNAME).$(VERSION).$(MINOR) $(INSTALLDIR)
@@ -47,6 +48,6 @@ indeedroot:
 	fi
 
 test: install
-	$(COMPILER) -combine QuitMessage.h main.cpp -rdynamic -ldl -lquitmessage -o main -v
+	$(COMPILER) -combine main.cpp -rdynamic -ldl -I../ -I../../../tools -I../../user -I../../connection -I../../channel -lquitmessage -o main -v
 
 .PHONY: help build install uninstall clean indeedroot test
