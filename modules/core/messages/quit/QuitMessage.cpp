@@ -12,9 +12,16 @@ QuitMessage::~QuitMessage(){}
 void QuitMessage::_init(){
     StringTokenizer st(_raw, ' ');
     
+    /*
+     * If the message starts with a forward slash,
+     * the message contains an user-entered
+     * line. If the message doesn't start with a forward
+     * slash, the message is handled as if it came from
+     * a server.
+     */
     if(_raw.at(0) == '/'){
 	_initFriendlyMessage(st);
-    }else if(_raw.at(0) == ':'){
+    }else{
 	_initMessage(st); 
     }
 }
@@ -24,29 +31,24 @@ void QuitMessage::_initFriendlyMessage(StringTokenizer st){
      * Message needs to be translated from
      * a user-entered format.
      */
-    string _tmp("");
+    string _tmp;
 	
     // Set the friendly command
     _friendly = string(st.next()).substr(1);
     
-    // Insert the parameter(s)
-    while(st.hasNext()){
-	_tmp = string(st.next());
+    // Figure out the parameter(s)
+    if(st.hasNext()){
+	_tmp.append(':');
 	
-	if(_tmp.at(0) == ':'){
-	    _tmp = _tmp.substr(1);
-	    
-	    while(st.hasNext()){
-		_tmp = _tmp.append(" ");
-		_tmp = _tmp.append(st.next());
-	    }
-	    _params.push_back(_tmp);
-	    
-	    break;
-	}else{
-	    _params.push_back(_tmp);
+	while(st.hasNext()){
+	    _tmp.append(string(st.next()));
 	}
+    }else{
+	_tmp.append(":I am leaving");
     }
+    
+    // Store the parameter(s)
+    _params.push_back(_tmp);
 	
 }
 
