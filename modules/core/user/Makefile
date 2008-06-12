@@ -16,6 +16,10 @@ help:
 	@echo "make clean	Cleans up this directory."
 	@echo "make distclean	Uninstalls the module and cleans up the directory."
 	@echo "		You need root for this."
+	@echo "make test	Installs the module and creates an executable"
+	@echo "		named test, that you can try out if the module works."
+	@echo "		This option outputs verbose compile messages also."
+	@echo "		You need root for this."
 	@echo "make help	Displays this message."
 	@echo
 
@@ -35,6 +39,7 @@ uninstall: indeedroot
 clean:
 	rm *o
 	rm *.so*
+	rm test
 
 distclean: uninstall clean
 
@@ -43,5 +48,8 @@ indeedroot:
 	    echo "You need root privileges to run this program." ; \
 	    exit 1 ; \
 	fi
+
+test: install
+	g++ main.cpp -lskaaruser -I$(HEADERSDIR) -o test -v
     
 .PHONY: help build install uninstall clean distclean indeedroot
