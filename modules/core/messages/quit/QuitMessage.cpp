@@ -2,28 +2,31 @@
 
 #include "QuitMessage.h"
 
+/* Constructor */
 QuitMessage::QuitMessage(string raw){
     _raw  = raw;
     _init();
 }
 
+/* Destructor */
 QuitMessage::~QuitMessage(){}
 
+/* Initialize the message */
 void QuitMessage::_init(){
     StringTokenizer st(_raw, ' ');
     string _tmp;
     
-    // Check if the message even has content
+    /* Check if the message even has content */
     if(st.count() <= 1){
 	throw string("Illegal message: ") + _raw;
     }
     
-    // Check if the used message is indeed a QUIT message
+    /* Check if the used message is indeed a QUIT message */
     if( string(st.next()).substr(1) != "quit" ){
 	throw string("Not a ") + string(QUITMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
-    // Figure out the parameter(s)
+    /* Figure out the parameter(s) */
     if(st.hasNext()){
 	for(int i = 0; st.hasNext(); i++){
 	    _tmp.append( i == 0 ? "" : " ");
@@ -33,7 +36,7 @@ void QuitMessage::_init(){
 	_tmp.append("I am leaving");
     }
     
-    // Store the parameter(s)
+    /* Store the parameter(s) */
     _params.push_back(_tmp);
     
 }
