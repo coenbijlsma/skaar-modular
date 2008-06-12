@@ -12,17 +12,24 @@ using namespace std;
 
 class QuitMessage : public IRCMessage {
 private:
+
+////////////////////////////////////////////////////////////////////////////////
+//				OBJECT VARIABLES			      //
+////////////////////////////////////////////////////////////////////////////////
+
     string				_raw;
-    string				_prefix;
-    string				_command;
-    string				_friendly;
+    vector<string>			_friendlies;
     vector<string> 			_params;
-    unsigned int			_minparams;
     User*				_user;
     
     void				_init();
-    void				_initFriendlyMessage(StringTokenizer st);
-    void				_initMessage(StringTokenizer st);
+
+////////////////////////////////////////////////////////////////////////////////
+//				CLASS VARIABLES				      //
+////////////////////////////////////////////////////////////////////////////////
+
+    static const string			_command 	= "QUIT";    
+    static const unsigned int		_minparams 	= 0;
     
 public:
 
@@ -31,20 +38,19 @@ public:
         
     string translate();
     
-    const string command();
-    
     const string friendly();
     
     const string prefix();
     
     const vector<string> params();
     
-    const unsigned int minParams();
-    
     bool setUser(User* user);
     
     bool transmit(IRCConnection* conn);
-    
+
+
+    static const string 	command();
+    static const unsigned int 	minParams();
 };
 
 typedef QuitMessage* create_qmessage_t(string raw);
