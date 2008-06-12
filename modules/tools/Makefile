@@ -4,6 +4,7 @@ LIBNAME=libskaartools.so
 VERSION=1
 MINOR=0
 COMPILER=g++
+HEADERSDIR=../../headers
 
 help:
 	@echo "Usage:"
@@ -13,13 +14,15 @@ help:
 	@echo "make uninstall	Removes the module and its symlinks."
 	@echo "		This also needs root privileges."
 	@echo "make clean	Cleans up this directory."
+	@echo "make distclean	Uninstalls and cleans the directory."
+	@echo "		You need root for this."
 	@echo "make help	Shows this message."
 	@echo
 	@echo "Dependencies:"
 	@echo "none"
 
 build:
-	$(COMPILER) -fPIC -g -c -Wall -combine StringTokenizer.h StringTokenizer.cpp
+	$(COMPILER) -fPIC -g -c -Wall -I$(HEADERSDIR) StringTokenizer.cpp
 	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -o $(LIBNAME).$(VERSION).$(MINOR) StringTokenizer.o -lc
 
 install: indeedroot build
@@ -32,9 +35,10 @@ uninstall: indeedroot
 	ldconfig $(INSTALLDIR)
 
 clean:
-	rm *.gch
 	rm *.o
 	rm *.so*
+
+distclean: uninstall clean
 
 indeedroot:
 	@if [ `whoami` != "root" ] ; then \
@@ -42,4 +46,4 @@ indeedroot:
 	    exit 1 ; \
 	fi	    
 
-.PHONY: help build install uninstall clean indeedroot
+.PHONY: help build install uninstall clean distclean indeedroot

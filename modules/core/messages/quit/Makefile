@@ -4,6 +4,7 @@ LIBNAME=libquitmessage.so
 VERSION=1
 MINOR=0
 COMPILER=g++
+HEADERSDIR=../../../../headers
 
 help:
 	@echo "Usage:" 
@@ -16,13 +17,15 @@ help:
 	@echo "make test		Installs the module and compiles main.cpp."
 	@echo "			Then run ./main to test the module."
 	@echo "			This option also requires root privileges."
+	@echo "make distclean		Uninstalls the module and cleans this directory."
+	@echo "			You need root for this."
 	@echo "make help		Shows this message"
 	@echo
 	@echo "Dependencies:"
 	@echo "libircconnection, libskaaruser, libircchannel, libskaartools"
 
 build:
-	$(COMPILER) -fPIC -g -c -Wall QuitMessage.cpp -I../ -I../../../tools -I../../user -I../../connection -I../../channel
+	$(COMPILER) -fPIC -g -c -Wall QuitMessage.cpp -I$(HEADERSDIR)
 	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -lircconnection -lskaaruser -lircchannel -lskaartools -o $(LIBNAME).$(VERSION).$(MINOR) QuitMessage.o -lc
 #	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -o $(LIBNAME).$(VERSION).$(MINOR) QuitMessage.o -lc
 
@@ -36,10 +39,11 @@ uninstall: indeedroot
 	ldconfig $(INSTALLDIR)
 
 clean:
-	rm *.gch
 	rm *.o
 	rm *.so*
 	rm main
+
+distclean: uninstall clean
 
 indeedroot:
 	@if [ `whoami` != "root" ] ; then \
@@ -48,6 +52,6 @@ indeedroot:
 	fi
 
 test: install
-	$(COMPILER) -combine main.cpp -rdynamic -ldl -I../ -I../../../tools -I../../user -I../../connection -I../../channel -lquitmessage -o main -v
+	$(COMPILER) -combine main.cpp -rdynamic -ldl -I$(HEADERSDIR) -lquitmessage -o main -v
 
-.PHONY: help build install uninstall clean indeedroot test
+.PHONY: help build install uninstall clean distclean indeedroot test

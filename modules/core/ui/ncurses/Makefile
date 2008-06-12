@@ -4,6 +4,7 @@ LIBNAME=libncursesui.so
 VERSION=1
 MINOR=0
 COMPILER=g++
+HEADERSDIR=../../../../headers
 
 help:
 	@echo "make build	Builds the module $(LIBNAME).$(VERSION).$(MINOR)."
@@ -12,11 +13,12 @@ help:
 	@echo "make uninstall	Removes the module and it's symlinks."
 	@echo "		You need root privileges for this also."
 	@echo "make clean	Cleans up this directory."
+	@echo "make distclean	Uninstalls the module and cleans up the directory."
 	@echo "make help	Displays this message."
 	@echo
 
 build:
-	$(COMPILER) -fPIC -g -c -Wall -combine ../VirtualUI.h NCursesUI.cpp
+	$(COMPILER) -fPIC -g -c -Wall -I$(HEADERSDIR) NCursesUI.cpp
 	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -lncurses -o $(LIBNAME).$(VERSION).$(MINOR) NCursesUI.o -lc
 
 install: indeedroot build
@@ -29,9 +31,10 @@ uninstall: indeedroot
 	ldconfig $(INSTALLDIR)
 
 clean:
-	rm ../*.gch
 	rm *.o
 	rm *.so*
+
+distclean: uninstall clean
 
 indeedroot:
 	@if [ `whoami` != "root" ] ; then \
@@ -39,4 +42,4 @@ indeedroot:
 	    exiut 1 ; \
 	fi
 
-.PHONY: help build install uninstall clean indeedroot
+.PHONY: help build install uninstall clean distclean indeedroot

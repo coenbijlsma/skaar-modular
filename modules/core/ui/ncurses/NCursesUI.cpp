@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include <limits.h>
 
-#include "../VirtualUI.h"
+#include "VirtualUI.h"
 
 using namespace std;
 

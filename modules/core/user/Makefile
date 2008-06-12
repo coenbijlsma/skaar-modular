@@ -4,6 +4,7 @@ LIBNAME=libskaaruser.so
 VERSION=1
 MINOR=0
 COMPILER=g++
+HEADERSDIR=../../../headers
 
 help:
 	@echo "Usage:"
@@ -13,11 +14,13 @@ help:
 	@echo "make uninstall	Removes the module and it's symlinks."
 	@echo "		For this you also need root privileges."
 	@echo "make clean	Cleans up this directory."
+	@echo "make distclean	Uninstalls the module and cleans up the directory."
+	@echo "		You need root for this."
 	@echo "make help	Displays this message."
 	@echo
 
 build: 
-	$(COMPILER) -fPIC -g -c -Wall -combine User.h User.cpp
+	$(COMPILER) -fPIC -g -c -Wall -I$(HEADERSDIR) User.cpp
 	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -o $(LIBNAME).$(VERSION).$(MINOR) User.o -lc
 
 install: indeedroot build
@@ -30,9 +33,10 @@ uninstall: indeedroot
 	ldconfig $(INSTALLDIR)
 
 clean:
-	rm *gch
 	rm *o
 	rm *.so*
+
+distclean: uninstall clean
 
 indeedroot:
 	@if [ `whoami` != "root" ] ; then \
@@ -40,4 +44,4 @@ indeedroot:
 	    exit 1 ; \
 	fi
     
-.PHONY: help build install uninstall clean indeedroot
+.PHONY: help build install uninstall clean distclean indeedroot

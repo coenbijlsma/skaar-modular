@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "../VirtualUI.h"
+#include "VirtualUI.h"
 
 using namespace std;
 
