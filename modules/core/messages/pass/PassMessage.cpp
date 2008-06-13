@@ -1,19 +1,19 @@
 #include <stdlib.h>
 
-#include "QuitMessage.h"
+#include "PassMessage.h"
 #include "StringTokenizer.h"
 
 /* Constructor */
-QuitMessage::QuitMessage(string raw){
+PassMessage::PassMessage(string raw){
     _raw  = raw;
     _init();
 }
 
 /* Destructor */
-QuitMessage::~QuitMessage(){}
+PassMessage::~PassMessage(){}
 
 /* Initialize the message */
-void QuitMessage::_init(){
+void PassMessage::_init(){
     
     /* Check if the message even has content */
     if(_raw.empty()){
@@ -23,14 +23,14 @@ void QuitMessage::_init(){
     StringTokenizer st(_raw, ' ');
     string _tmp;
     
-    if(st.count() > QUITMESSAGE_MAXPARAMS){
-	throw string("Too many parameters for message ") + _raw;
+    if(st.count() < (PASSMESSAGE_MINPARAMS +1) || st.count() > (PASSMESSAGE_MAXPARAMS +1) ){
+	throw string("Wrong parameter count for message ") + _raw;
     }
     
-    /* Check if the used message is indeed a QUIT message */
+    /* Check if the used message is indeed a PASS message */
     // XXX ALIASES
-    if( string(st.next()).substr(1) != QUITMESSAGE_FRIENDLY ){
-	throw string("Not a ") + string(QUITMESSAGE_COMMAND) + string(" message: ") + _raw;
+    if( string(st.next()).substr(1) != PASSMESSAGE_FRIENDLY ){
+	throw string("Not a ") + string(PASSMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
     /* Figure out the parameter(s) */
@@ -39,8 +39,6 @@ void QuitMessage::_init(){
 	    _tmp.append( i == 0 ? "" : SPACE);
 	    _tmp.append(string(st.next()));
 	}
-    }else{
-	_tmp.append("I am leaving");
     }
     
     /* Store the parameter(s) */
@@ -48,10 +46,10 @@ void QuitMessage::_init(){
     
 }
 
-string QuitMessage::translate(){
+string PassMessage::translate(){
     string _tmp;
     
-    _tmp = _tmp.append(QUITMESSAGE_COMMAND);
+    _tmp = _tmp.append(PASSMESSAGE_COMMAND);
     _tmp = _tmp.append(" :");
     _tmp = _tmp.append(_params.at(0));
     _tmp = _tmp.append(CRLF);
@@ -59,20 +57,20 @@ string QuitMessage::translate(){
     return _tmp;
 }
 
-const string QuitMessage::prefix(){
+const string PassMessage::prefix(){
     // NOT IMPLEMENTED;
     return "";
 }
 
-const vector<string> QuitMessage::params(){
+const vector<string> PassMessage::params(){
     return _params;
 }
 
-void QuitMessage::setUser(User* user){
+void PassMessage::setUser(User* user){
     _user = user;
 }	
 
-bool QuitMessage::transmit(IRCConnection* conn){
+bool PassMessage::transmit(IRCConnection* conn){
     if(conn == 0 || ! conn->connected()){
 	throw "Not connected!";
     }
@@ -80,16 +78,16 @@ bool QuitMessage::transmit(IRCConnection* conn){
     return conn->sendMessage(translate());
 }
 
-const string QuitMessage::command(){
-    return QUITMESSAGE_COMMAND;
+const string PassMessage::command(){
+    return PASSMESSAGE_COMMAND;
 }
 
-const string QuitMessage::friendly(){
-    return QUITMESSAGE_FRIENDLY;
+const string PassMessage::friendly(){
+    return PASSMESSAGE_FRIENDLY;
 }
 
-const unsigned int QuitMessage::minParams(){
-    return QUITMESSAGE_MINPARAMS;
+const unsigned int PassMessage::minParams(){
+    return PASSMESSAGE_MINPARAMS;
 }
 
 
@@ -97,10 +95,10 @@ const unsigned int QuitMessage::minParams(){
 //			    CLASS FACTORY METHODS			      //
 ////////////////////////////////////////////////////////////////////////////////
 
-extern "C" QuitMessage* create_qmessage(string raw){
-    return new QuitMessage(raw);
+extern "C" PassMessage* create_qmessage(string raw){
+    return new PassMessage(raw);
 }
 
-extern "C" void destroy_qmessage(QuitMessage* message){
+extern "C" void destroy_qmessage(PassMessage* message){
     delete message;
 }

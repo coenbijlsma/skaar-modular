@@ -22,11 +22,11 @@ help:
 	@echo "make help		Shows this message"
 	@echo
 	@echo "Dependencies:"
-	@echo "libircconnection, libskaaruser, libircchannel, libskaartools"
+	@echo "libircconnection, libskaaruser, libskaartools"
 
 build:
 	$(COMPILER) -fPIC -g -c -Wall QuitMessage.cpp -I$(HEADERSDIR)
-	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -lircconnection -lskaaruser -lircchannel -lskaartools -o $(LIBNAME).$(VERSION).$(MINOR) QuitMessage.o -lc
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -lircconnection -lskaaruser -lskaartools -o $(LIBNAME).$(VERSION).$(MINOR) QuitMessage.o -lc
 #	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -o $(LIBNAME).$(VERSION).$(MINOR) QuitMessage.o -lc
 
 install: indeedroot build
