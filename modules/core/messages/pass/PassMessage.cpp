@@ -50,7 +50,7 @@ string PassMessage::translate(){
     string _tmp;
     
     _tmp = _tmp.append(PASSMESSAGE_COMMAND);
-    _tmp = _tmp.append(" :");
+    _tmp = _tmp.append(" ");
     _tmp = _tmp.append(_params.at(0));
     _tmp = _tmp.append(CRLF);
     

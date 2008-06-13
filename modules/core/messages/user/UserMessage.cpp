@@ -1,17 +1,17 @@
-#include "NickMessage.h"
+#include "UserMessage.h"
 #include "StringTokenizer.h"
 
 /* Constructor */
-NickMessage::NickMessage(string raw){
+UserMessage::UserMessage(string raw){
     _raw = raw;
     _init();
 }
 
 /* Destructor */
-NickMessage::~NickMessage(){}
+UserMessage::~UserMessage(){}
 
 /* Initializes the message */
-void NickMessage::_init(){
+void UserMessage::_init(){
     
     /* Check if the message even has content */
     if(_raw.empty()){
@@ -21,30 +21,39 @@ void NickMessage::_init(){
     StringTokenizer st(_raw, ' ');
     string _tmp;
     
-    if(st.count() < (NICKMESSAGE_MINPARAMS +1) || st.count() > (NICKMESSAGE_MAXPARAMS +1) ){
-	throw string("Wrong parameter count in message ") + _raw;
+    if(st.count() < (USERMESSAGE_MINPARAMS +1) ){
+	throw string("Not enough parameters supplied in message ") + _raw;
     }
     
     /* Check if the message really is a nick message */
     // XXX ALIASES
-    if(string(st.next()).substr(1) != NICKMESSAGE_FRIENDLY){
-	throw string("Not a ") + string(NICKMESSAGE_COMMAND) + string(" message: ") + _raw;
+    if(string(st.next()).substr(1) != USERMESSAGE_FRIENDLY){
+	throw string("Not a ") + string(USERMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
     /* Read the parameters */
     for(int i = 0; st.hasNext(); i++){
-	_params.push_back(string(st.next()));
+	if(i == (USERMESSAGE_MAXPARAMS -1)){
+	    while(st.hasNext()){
+		_tmp.append( _tmp.empty() ? "" : SPACE );
+		_tmp.append( (string(st.next())) );
+	    }
+	    _params.push_back(_tmp);
+	}else{    
+	    _params.push_back(string(st.next()));
+	}
     }
 }
 
 /* Translate the message to an RFC string */
-string NickMessage::translate(){
+string UserMessage::translate(){
     
     string _tmp;
-    _tmp.append(NICKMESSAGE_COMMAND);
+    _tmp.append(USERMESSAGE_COMMAND);
 
     for(int i = 0; i < _params.size(); i++){
 	_tmp.append(SPACE);
+	_tmp.append( (i == _params.size() -1) ? ":" : ""); // prepend colon for the last parameter
 	_tmp.append(_params.at(i));
     }
     
@@ -53,23 +62,23 @@ string NickMessage::translate(){
 }
 
 /* Return the prefix */
-const string NickMessage::prefix(){
+const string UserMessage::prefix(){
     // NOT IMPLEMENTED
     return "";
 }
 
 /* Return the parameters of this message */
-const vector<string> NickMessage::params(){
+const vector<string> UserMessage::params(){
     return _params;
 }
 
 /* Sets the user that sends this message */
-void NickMessage::setUser(User* user){
+void UserMessage::setUser(User* user){
     _user = user;
 }
 
 /* Transmits the message to the server */
-bool NickMessage::transmit(IRCConnection* conn){
+bool UserMessage::transmit(IRCConnection* conn){
     if(conn == 0 || ! conn->connected()){
 	throw "Not connected!";
     }
@@ -77,28 +86,28 @@ bool NickMessage::transmit(IRCConnection* conn){
 }
 
 /* Returns the command */
-const string NickMessage::command(){
-    return NICKMESSAGE_COMMAND;
+const string UserMessage::command(){
+    return USERMESSAGE_COMMAND;
 }
 
 /* Returns the friendly command */
-const string NickMessage::friendly(){
-    return NICKMESSAGE_FRIENDLY;
+const string UserMessage::friendly(){
+    return USERMESSAGE_FRIENDLY;
 }
 
 /* Returns the minimum amount of parameters needed */
-const unsigned int NickMessage::minParams(){
-    return NICKMESSAGE_MINPARAMS;
+const unsigned int UserMessage::minParams(){
+    return USERMESSAGE_MINPARAMS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //			   CLASS FACTORY METHODS			      //
 ////////////////////////////////////////////////////////////////////////////////
 
-extern "C" NickMessage* create_nickmessage(string raw){
-    return new NickMessage(raw);
+extern "C" UserMessage* create_nickmessage(string raw){
+    return new UserMessage(raw);
 }
 
-extern "C" void destroy_nickmessage(NickMessage* message){
+extern "C" void destroy_nickmessage(UserMessage* message){
     delete message;
 }
