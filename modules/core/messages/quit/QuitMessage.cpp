@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "QuitMessage.h"
+#include "StringTokenizer.h"
 
 /* Constructor */
 QuitMessage::QuitMessage(string raw){
@@ -13,23 +14,29 @@ QuitMessage::~QuitMessage(){}
 
 /* Initialize the message */
 void QuitMessage::_init(){
+    
+    /* Check if the message even has content */
+    if(_raw.empty() ||){
+	throw string("Illegal message.");
+    }
+    
     StringTokenizer st(_raw, ' ');
     string _tmp;
     
-    /* Check if the message even has content */
-    if(st.count() <= 1){
-	throw string("Illegal message: ") + _raw;
+    if(st.count() > QUITMESSAGE_MAXPARAMS){
+	throw string("Too manu parameters for message ") + _raw;
     }
     
     /* Check if the used message is indeed a QUIT message */
-    if( string(st.next()).substr(1) != "quit" ){
+    // XXX ALIASES
+    if( string(st.next()).substr(1) != QUITMESSAGE_FRIENDLY ){
 	throw string("Not a ") + string(QUITMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
     /* Figure out the parameter(s) */
     if(st.hasNext()){
 	for(int i = 0; st.hasNext(); i++){
-	    _tmp.append( i == 0 ? "" : " ");
+	    _tmp.append( i == 0 ? "" : SPACE);
 	    _tmp.append(string(st.next()));
 	}
     }else{
@@ -67,16 +74,12 @@ bool QuitMessage::setUser(User* user){
 }	
 
 bool QuitMessage::transmit(IRCConnection* conn){
-    if(conn != 0){
-	return conn->sendMessage(translate());
-    }else{
-	throw "No connection available!";
+    if(conn == 0 || ! conn->connected()){
+	throw "Not connected!";
     }
+    
+    return conn->sendMessage(translate());
 }
-
-////////////////////////////////////////////////////////////////////////////////
-//				CONST METHODS				      //
-////////////////////////////////////////////////////////////////////////////////
 
 const string QuitMessage::command(){
     return QUITMESSAGE_COMMAND;

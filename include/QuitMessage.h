@@ -4,23 +4,18 @@
 #define QUITMESSAGE_COMMAND "QUIT"
 #define QUITMESSAGE_FRIENDLY "quit"
 #define QUITMESSAGE_MINPARAMS 0
+#define QUITMESSAGE_MAXPARAMS 1
 
 #include <iostream> // FOR DEBUG ONLY
 #include <string>
 #include <vector>
 
 #include "IRCMessage.h"
-#include "StringTokenizer.h"
 
 using namespace std;
 
 class QuitMessage : public IRCMessage {
 private:
-
-////////////////////////////////////////////////////////////////////////////////
-//				OBJECT VARIABLES			      //
-////////////////////////////////////////////////////////////////////////////////
-
     string			_raw;
     vector<string> 		_params;
     User*			_user;
@@ -35,9 +30,8 @@ public:
     string 			translate();
     const string 		prefix();
     const vector<string> 	params();
-    bool 			setUser(User* user);
+    void 			setUser(User* user);
     bool 			transmit(IRCConnection* conn);
-
 
     const string 		command();
     const string		friendly();

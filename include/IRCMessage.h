@@ -16,6 +16,10 @@
 #define CRLF "\r\n"
 #endif
 
+#ifndef SPACE
+#define SPACE " "
+#endif
+
 using namespace std;
     
 class IRCMessage {
@@ -67,7 +71,7 @@ public:
     /*
      * Sets the user who sends this message.
      */
-    virtual bool setUser(User* u) =0;
+    virtual void setUser(User* u) =0;
     
     /*
      * Actually transmits the message.
