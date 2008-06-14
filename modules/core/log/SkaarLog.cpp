@@ -5,20 +5,17 @@
 #include <fstream>
 #include <ctime>
 #include <stdlib.h>
-#include <sys/stat.h>
 
 /* Constructor */
 SkaarLog::SkaarLog(){
     _filename = LOGFILE;
-    _filename.append(".");
-    _filename.append(_getDateTime(string("%Y%m%d")));    
+    _init();
 }
 
 /* Constructor */
 SkaarLog::SkaarLog(string basename){
     _filename = basename;
-    _filename.append(".");
-    _filename.append(_getDateTime(string("%Y%m%d")));
+    _init();
 }
 
 /* Destructor */
@@ -28,6 +25,12 @@ SkaarLog::~SkaarLog(){
 	    cerr << "ERROR: Some entries have not been logged because of an error." << endl;
 	}
     }
+}
+
+/* Prepares the class for use */
+void SkaarLog::_init(){
+    _filename.append(".");
+    _filename.append(_getDateTime(string("%Y%m%d")));
 }
 
 /* Returns a string containing the current time. */

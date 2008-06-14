@@ -14,8 +14,9 @@ private:
     string		_filename;
     vector<string>	_entries;
     
+    void		_init();
     string		_getDateTime(string);
-
+    
 public:
     enum loglevel_t {LOG_USER = 0, LOG_INFO, LOG_NOTICE, LOG_WARNING, LOG_ERROR, LOG_FAILURE};
     

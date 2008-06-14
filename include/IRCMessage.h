@@ -23,7 +23,6 @@
 using namespace std;
     
 class IRCMessage {
-protected:
     
 public:
     
