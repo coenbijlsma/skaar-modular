@@ -6,5 +6,11 @@ int main(int argc, char** argv){
     level = SkaarLog::LOG_USER;
     
     log->append("TEST LOG ENTRY", level);
-    return log->save();
+    if(log->save()){
+	delete log;
+	return true;
+    }else{
+	delete log;
+	return false;
+    }
 }
