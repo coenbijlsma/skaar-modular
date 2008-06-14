@@ -1,0 +1,104 @@
+#include "JoinMessage.h"
+#include "StringTokenizer.h"
+
+/* Constructor */
+JoinMessage::JoinMessage(string raw){
+    _raw = raw;
+    _init();
+}
+
+/* Destructor */
+JoinMessage::~JoinMessage(){}
+
+/* Initializes the message */
+void JoinMessage::_init(){
+    
+    /* Check if the message even has content */
+    if(_raw.empty()){
+	throw string("Illegal message.");
+    }
+    
+    StringTokenizer st(_raw, ' ');
+    string _tmp;
+    
+    if(st.count() < (JOINMESSAGE_MINPARAMS +1) || st.count() > (JOINMESSAGE_MAXPARAMS +1) ){
+	throw string("Wrong parameter count in message ") + _raw;
+    }
+    
+    /* Check if the message really is a join message */
+    // XXX ALIASES
+    if(string(st.next()).substr(1) != JOINMESSAGE_FRIENDLY){
+	throw string("Not a ") + string(JOINMESSAGE_COMMAND) + string(" message: ") + _raw;
+    }
+    
+    /* Read the parameters */
+    for(int i = 0; st.hasNext(); i++){
+	_params.push_back(string(st.next()));
+    }
+}
+
+/* Translate the message to an RFC string */
+string JoinMessage::translate(){
+    
+    string _tmp;
+    _tmp.append(JOINMESSAGE_COMMAND);
+
+    for(int i = 0; i < _params.size(); i++){
+	_tmp.append(SPACE);
+	_tmp.append(_params.at(i));
+    }
+    
+    _tmp.append(CRLF);
+    return _tmp;    
+}
+
+/* Return the prefix */
+const string JoinMessage::prefix(){
+    // NOT IMPLEMENTED
+    return "";
+}
+
+/* Return the parameters of this message */
+const vector<string> JoinMessage::params(){
+    return _params;
+}
+
+/* Sets the user that sends this message */
+void JoinMessage::setUser(User* user){
+    _user = user;
+}
+
+/* Transmits the message to the server */
+bool JoinMessage::transmit(IRCConnection* conn){
+    if(conn == 0 || ! conn->connected()){
+	throw "Not connected!";
+    }
+    return conn->sendMessage(translate());
+}
+
+/* Returns the command */
+const string JoinMessage::command(){
+    return JOINMESSAGE_COMMAND;
+}
+
+/* Returns the friendly command */
+const string JoinMessage::friendly(){
+    return JOINMESSAGE_FRIENDLY;
+}
+
+/* Returns the minimum amount of parameters needed */
+const unsigned int JoinMessage::minParams(){
+    return JOINMESSAGE_MINPARAMS;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//			   CLASS FACTORY METHODS			      //
+////////////////////////////////////////////////////////////////////////////////
+
+extern "C" JoinMessage* create_nickmessage(string raw){
+    return new JoinMessage(raw);
+}
+
+extern "C" void destroy_nickmessage(JoinMessage* message){
+    delete message;
+}

@@ -33,6 +33,7 @@ void UserMessage::_init(){
     
     /* Read the parameters */
     for(int i = 0; st.hasNext(); i++){
+	/* If we reach the last parameter, put them together */
 	if(i == (USERMESSAGE_MAXPARAMS -1)){
 	    while(st.hasNext()){
 		_tmp.append( _tmp.empty() ? "" : SPACE );

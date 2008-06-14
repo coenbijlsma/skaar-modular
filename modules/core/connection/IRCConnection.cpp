@@ -96,7 +96,7 @@ bool IRCConnection::sendMessage(string msg){
 	perror("send");
 	return false;
     }
-    
+    printf("Message sent: %s", msg.c_str());
     return true;
 }
 

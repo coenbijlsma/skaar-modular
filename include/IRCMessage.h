@@ -13,7 +13,7 @@
 #endif
 
 #ifndef CRLF
-#define CRLF "\r\n"
+#define CRLF "\n\r"
 #endif
 
 #ifndef SPACE

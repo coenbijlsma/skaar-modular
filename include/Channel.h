@@ -7,8 +7,8 @@ using namespace std;
 
 class Channel {
 private:
-    string _name;
-    
+    string 	_name;
+        
 public:
     Channel(string name);
     ~Channel();
