@@ -4,28 +4,55 @@
 #include <string>
 #include <vector>
 
-#define MAXLOGS 20
+#define MAXLOGFILES 20
 #define LOGFILE "skaar.log"
 
 using namespace std;
 
 class SkaarLog {
 private:
+    string		_filename;
     vector<string>	_entries;
+    
+    string		_getDateTime(string);
 
 public:
-    static enum loglevel_t {LOG_USER = 0, LOG_INFO = 1, LOG_NOTICE = 2, LOG_WARNING = 3, LOG_ERROR = 4, LOG_FAILURE = 5};
+    enum loglevel_t {LOG_USER = 0, LOG_INFO, LOG_NOTICE, LOG_WARNING, LOG_ERROR, LOG_FAILURE};
     
+    /* 
+     * Constructor.
+     * Constructs a new log with filename
+     * LOGFILE. The current date in the form
+     * of YYYYMMDD is appended to the filename.
+     */
     SkaarLog();
-    SkaarLog(string filename);
+    
+    /*
+     * Constructor.
+     * Constructs a new log with the
+     * specified filename. The current date
+     * is appended in the form of YYYYMMDD.
+     */
+    SkaarLog(string);
+    
+    /*
+     * Destructor. 
+     * If the vector _entries is not empty,
+     * the entries are stored in the file 
+     * if possible.
+     */
     ~SkaarLog();
     
     /*
      * Appends the specified entry to the log.
-     * Entries are logged in the following format:
+     * If add_extras is set to true, entries are 
+     * logged in the following format:
      * <time> <log_level> <log_entry> 
+     * 
+     * If add_extras is false, only the log message
+     * is appended to the logfile.
      */
-    bool append(string log, loglevel_t severity = 0);
+    void append(string log, loglevel_t severity = LOG_USER, bool add_extras = false);
     
     /*
      * Stores the inserted entries in the file.

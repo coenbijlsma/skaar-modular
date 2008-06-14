@@ -51,6 +51,6 @@ indeedroot:
 	fi
 
 test: install
-	$(COMPILER) -combine main.cpp -rdynamic -ldl -I$(HEADERSDIR) -ljoinmessage -o test -v
+	$(COMPILER) main.cpp -rdynamic -ldl -I$(HEADERSDIR) -ljoinmessage -o test -v
 
 .PHONY: help build install uninstall clean distclean indeedroot test
