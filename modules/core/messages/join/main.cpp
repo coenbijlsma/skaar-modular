@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv){
     try{
-	string line("/join #coenschannel,#testchannel passwd");
+	string line("/JOIN #coenschannel,#testchannel passwd");
 	JoinMessage* nm = new JoinMessage(line);
 	
 	cout << nm->translate() << endl;

@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv){
     try{
-	string line("/user coen 0 0 Coen Bijlsma");
+	string line("/USER coen 0 0 Coen Bijlsma");
 	UserMessage* nm = new UserMessage(line);
 	
 	cout << nm->translate() << endl;

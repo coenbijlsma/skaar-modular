@@ -26,8 +26,7 @@ void NickMessage::_init(){
     }
     
     /* Check if the message really is a nick message */
-    // XXX ALIASES
-    if(string(st.next()).substr(1) != NICKMESSAGE_FRIENDLY){
+    if(string(st.next()).substr(1) != NICKMESSAGE_COMMAND){
 	throw string("Not a ") + string(NICKMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
@@ -79,11 +78,6 @@ bool NickMessage::transmit(IRCConnection* conn){
 /* Returns the command */
 const string NickMessage::command(){
     return NICKMESSAGE_COMMAND;
-}
-
-/* Returns the friendly command */
-const string NickMessage::friendly(){
-    return NICKMESSAGE_FRIENDLY;
 }
 
 /* Returns the minimum amount of parameters needed */

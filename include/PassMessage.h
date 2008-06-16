@@ -2,7 +2,6 @@
 #define PASSMESSAGE_H
 
 #define PASSMESSAGE_COMMAND "PASS"
-#define PASSMESSAGE_FRIENDLY "pass"
 #define PASSMESSAGE_MINPARAMS 1
 #define PASSMESSAGE_MAXPARAMS 1
 
@@ -34,7 +33,6 @@ public:
     bool 			transmit(IRCConnection* conn);
 
     const string 		command();
-    const string		friendly();
     const unsigned int 		minParams();
 };
 

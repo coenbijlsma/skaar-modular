@@ -2,7 +2,6 @@
 #define PRIVMSGMESSAGE_H
 
 #define PRIVMSGMESSAGE_COMMAND "PRIVMSG"
-#define PRIVMSGMESSAGE_FRIENDLY "say"
 #define PRIVMSGMESSAGE_MINPARAMS 2
 #define PRIVMSGMESSAGE_MAXPARAMS 2
 
@@ -18,7 +17,7 @@ class PrivmsgMessage : public IRCMessage {
 private:
     string			_raw;
     vector<string> 		_params;
-    vector<string>		_receivers;
+    string			_receiver;
     User*			_user;
     
     void			_init();
@@ -33,11 +32,10 @@ public:
     const vector<string> 	params();
     const vector<string>	receivers();
     void 			setUser(User* user);
-    void			addReceiver(string rcv);
+    void			setReceiver(string rcv);
     bool 			transmit(IRCConnection* conn);
     
     const string 		command();
-    const string 		friendly();
     const unsigned int 		minParams();
 };
 

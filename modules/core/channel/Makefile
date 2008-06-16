@@ -19,11 +19,11 @@ help:
 	@echo "make help		Shows this message."
 	@echo
 	@echo "Dependencies:"
-	@echo "none"
+	@echo "libircconnection"
 
 build:
 	$(COMPILER) -fPIC -g -c -Wall -I$(HEADERSDIR) Channel.cpp
-	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -o $(LIBNAME).$(VERSION).$(MINOR) Channel.o -lc
+	$(COMPILER) -shared -Wl,-soname,$(LIBNAME).$(VERSION) -lircconnection -o $(LIBNAME).$(VERSION).$(MINOR) Channel.o -lc
 
 install: indeedroot build
 	cp $(LIBNAME).$(VERSION).$(MINOR) $(INSTALLDIR)

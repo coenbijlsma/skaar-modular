@@ -40,14 +40,6 @@ public:
     virtual const unsigned int minParams() =0;
     
     /*
-     * Returns the friendly command of the
-     * message, I.E. quit for a QUIT message.
-     * The friendly message is the message used
-     * by the user.
-     */
-    virtual const string friendly() =0;
-        
-    /*
      * Translates the raw message
      * to a RFC 1459 compliant string.
      */

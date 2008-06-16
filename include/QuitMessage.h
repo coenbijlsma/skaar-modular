@@ -2,7 +2,6 @@
 #define QUITMESSAGE_H
 
 #define QUITMESSAGE_COMMAND "QUIT"
-#define QUITMESSAGE_FRIENDLY "quit"
 #define QUITMESSAGE_MINPARAMS 0
 #define QUITMESSAGE_MAXPARAMS 1
 
@@ -34,7 +33,6 @@ public:
     bool 			transmit(IRCConnection* conn);
 
     const string 		command();
-    const string		friendly();
     const unsigned int 		minParams();
 };
 

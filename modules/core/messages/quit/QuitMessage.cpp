@@ -29,7 +29,7 @@ void QuitMessage::_init(){
     
     /* Check if the used message is indeed a QUIT message */
     // XXX ALIASES
-    if( string(st.next()).substr(1) != QUITMESSAGE_FRIENDLY ){
+    if( string(st.next()).substr(1) != QUITMESSAGE_COMMAND ){
 	throw string("Not a ") + string(QUITMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
@@ -82,10 +82,6 @@ bool QuitMessage::transmit(IRCConnection* conn){
 
 const string QuitMessage::command(){
     return QUITMESSAGE_COMMAND;
-}
-
-const string QuitMessage::friendly(){
-    return QUITMESSAGE_FRIENDLY;
 }
 
 const unsigned int QuitMessage::minParams(){

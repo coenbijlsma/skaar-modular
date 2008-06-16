@@ -29,7 +29,7 @@ void PassMessage::_init(){
     
     /* Check if the used message is indeed a PASS message */
     // XXX ALIASES
-    if( string(st.next()).substr(1) != PASSMESSAGE_FRIENDLY ){
+    if( string(st.next()).substr(1) != PASSMESSAGE_COMMAND ){
 	throw string("Not a ") + string(PASSMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
@@ -80,10 +80,6 @@ bool PassMessage::transmit(IRCConnection* conn){
 
 const string PassMessage::command(){
     return PASSMESSAGE_COMMAND;
-}
-
-const string PassMessage::friendly(){
-    return PASSMESSAGE_FRIENDLY;
 }
 
 const unsigned int PassMessage::minParams(){

@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char** argv){
     
     try{
-	string line("/pass test");
+	string line("/PASS test");
 	PassMessage* msg = new PassMessage(line);
 	
 	cout << msg->translate() << endl;

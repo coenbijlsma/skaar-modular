@@ -2,7 +2,6 @@
 #define NICKMESSAGE_H
 
 #define NICKMESSAGE_COMMAND "NICK"
-#define NICKMESSAGE_FRIENDLY "nick"
 #define NICKMESSAGE_MINPARAMS 1
 #define NICKMESSAGE_MAXPARAMS 2
 
@@ -34,7 +33,6 @@ public:
     bool 			transmit(IRCConnection* conn);
     
     const string 		command();
-    const string 		friendly();
     const unsigned int 		minParams();
 };
 

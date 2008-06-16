@@ -27,7 +27,7 @@ void UserMessage::_init(){
     
     /* Check if the message really is a nick message */
     // XXX ALIASES
-    if(string(st.next()).substr(1) != USERMESSAGE_FRIENDLY){
+    if(string(st.next()).substr(1) != USERMESSAGE_COMMAND){
 	throw string("Not a ") + string(USERMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
@@ -89,11 +89,6 @@ bool UserMessage::transmit(IRCConnection* conn){
 /* Returns the command */
 const string UserMessage::command(){
     return USERMESSAGE_COMMAND;
-}
-
-/* Returns the friendly command */
-const string UserMessage::friendly(){
-    return USERMESSAGE_FRIENDLY;
 }
 
 /* Returns the minimum amount of parameters needed */

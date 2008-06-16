@@ -2,7 +2,6 @@
 #define USERMESSAGE_H
 
 #define USERMESSAGE_COMMAND "USER"
-#define USERMESSAGE_FRIENDLY "user"
 #define USERMESSAGE_MINPARAMS 4
 #define USERMESSAGE_MAXPARAMS 4
 
@@ -34,7 +33,6 @@ public:
     bool 			transmit(IRCConnection* conn);
     
     const string 		command();
-    const string 		friendly();
     const unsigned int 		minParams();
 };
 

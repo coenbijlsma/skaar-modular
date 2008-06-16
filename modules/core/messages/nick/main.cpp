@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv){
     try{
-	string line("/quit coenie 15");
+	string line("/NICK coenie 15");
 	NickMessage* nm = new NickMessage(line);
 	
 	cout << nm->translate() << endl;

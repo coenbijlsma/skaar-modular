@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv){
     try{
-	string line("/say What's up?");
+	string line("/PRIVMSG What's up?");
 	PrivmsgMessage* pm = new PrivmsgMessage(line);
 	pm->addReceiver("#skaar");
 	cout << pm->translate() << endl;

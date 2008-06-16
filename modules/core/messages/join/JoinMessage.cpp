@@ -26,8 +26,7 @@ void JoinMessage::_init(){
     }
     
     /* Check if the message really is a join message */
-    // XXX ALIASES
-    if(string(st.next()).substr(1) != JOINMESSAGE_FRIENDLY){
+    if(string(st.next()).substr(1) != JOINMESSAGE_COMMAND){
 	throw string("Not a ") + string(JOINMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
@@ -79,11 +78,6 @@ bool JoinMessage::transmit(IRCConnection* conn){
 /* Returns the command */
 const string JoinMessage::command(){
     return JOINMESSAGE_COMMAND;
-}
-
-/* Returns the friendly command */
-const string JoinMessage::friendly(){
-    return JOINMESSAGE_FRIENDLY;
 }
 
 /* Returns the minimum amount of parameters needed */

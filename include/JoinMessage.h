@@ -2,7 +2,6 @@
 #define JOINMESSAGE_H
 
 #define JOINMESSAGE_COMMAND "JOIN"
-#define JOINMESSAGE_FRIENDLY "join"
 #define JOINMESSAGE_MINPARAMS 1
 #define JOINMESSAGE_MAXPARAMS 2
 
@@ -34,7 +33,6 @@ public:
     bool 			transmit(IRCConnection* conn);
     
     const string 		command();
-    const string 		friendly();
     const unsigned int 		minParams();
 };
 

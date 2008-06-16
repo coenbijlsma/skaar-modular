@@ -28,7 +28,7 @@ void PrivmsgMessage::_init(){
     
 	/* Check if the message really is a privmsg message */
 	// XXX ALIASES
-	if(string(st.next()).substr(1) != PRIVMSGMESSAGE_FRIENDLY){
+	if(string(st.next()).substr(1) != PRIVMSGMESSAGE_COMMAND){
 	    throw string("Not a ") + string(PRIVMSGMESSAGE_COMMAND) + string(" message: ") + _raw;
 	}
 	
@@ -78,8 +78,8 @@ const vector<string> PrivmsgMessage::params(){
     return _params;
 }
 
-const vector<string> PrivmsgMessage::receivers(){
-    return _receivers;
+const string PrivmsgMessage::receiver(){
+    return _receiver;
 }
 
 /* Sets the user that sends this message */
@@ -87,8 +87,8 @@ void PrivmsgMessage::setUser(User* user){
     _user = user;
 }
 
-void PrivmsgMessage::addReceiver(string recv){
-    _receivers.push_back(recv);
+void PrivmsgMessage::setReceiver(string recv){
+    _receiver = recv;
 }
 
 /* Transmits the message to the server */
@@ -102,11 +102,6 @@ bool PrivmsgMessage::transmit(IRCConnection* conn){
 /* Returns the command */
 const string PrivmsgMessage::command(){
     return PRIVMSGMESSAGE_COMMAND;
-}
-
-/* Returns the friendly command */
-const string PrivmsgMessage::friendly(){
-    return PRIVMSGMESSAGE_FRIENDLY;
 }
 
 /* Returns the minimum amount of parameters needed */
