@@ -6,10 +6,11 @@
 #include <vector>
 
 #include "IRCConnection.h" 	// The connection
-#include "IRCMessage.h"		// The messages
+//#include "IRCMessage.h"		// The messages
 #include "SkaarConfig.h"	// The configuration
 #include "User.h"		// The user
 #include "VirtualUI.h" 		// The UI
+#include "Channel.h"
 
 using namespace std;
 
@@ -22,6 +23,8 @@ private:
     map<string, string>		_messageAliases;
     map<string, Channel*>	_openChannels;
     User*			_user;
+    
+    void*			_dlUI;
     VirtualUI*			_ui;
     
     IRCConnection*		_activeConnection;

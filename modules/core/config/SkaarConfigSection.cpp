@@ -3,7 +3,7 @@
 #include <iostream>
 
 SkaarConfigSection::SkaarConfigSection(string name){
-    cout << "DEBUG: SkaarConfigSection(" << name << ")" << endl;
+    //cout << "DEBUG: SkaarConfigSection(" << name << ")" << endl;
     _name = name;
 }
 
@@ -23,7 +23,7 @@ string SkaarConfigSection::get(string setting){
 }
 
 void SkaarConfigSection::set(string setting, string value){
-    cout << "DEBUG: Entry: " << setting << ", value: " << value << endl;
+    //cout << "DEBUG: Entry: " << setting << ", value: " << value << endl;
     _entries[setting] = value;
 }
 

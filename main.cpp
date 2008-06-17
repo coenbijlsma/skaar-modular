@@ -6,6 +6,8 @@
 using namespace std;
 
 int main(int argc, char** argv){
+    cout << "Starting..." << endl;
+    
     Skaar* skaar = new Skaar();
     
     try{
@@ -13,7 +15,10 @@ int main(int argc, char** argv){
 	skaar->startWork();
     }catch(string msg){
 	cerr << msg << endl;
+	delete skaar;
 	return 1;
     }
+    cout << "That was skaar..." << endl;
+    delete skaar;
     return 0;
 }

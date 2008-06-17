@@ -13,12 +13,9 @@ public:
 	initscr();
     }
     
-    ~NCursesUI(){
-	endwin();
-    }
-    
     bool printline(string line, bool error){
 	if(printw(line.c_str()) != OK){
+	    refresh();
 	    return false;
 	}
 	refresh();
@@ -34,6 +31,10 @@ public:
 	}
     }
     
+    void endUI(){
+	endwin();
+    }
+    
 };
 
 // CLASS FACTORIES
@@ -42,5 +43,7 @@ extern "C" VirtualUI* create_ui(){
 }
 
 extern "C" void destroy_ui(VirtualUI* ui){
+    getch();
+    ( (NCursesUI*)ui)->endUI();
     delete ui;
 }

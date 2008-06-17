@@ -43,6 +43,7 @@ void SkaarConfig::_init(){
     ifstream _ifstream(_filename.c_str(), ios::in);
     
     if( ! _ifstream.is_open()){
+	_ifstream.close();
 	throw string("Could not open file ") + _filename;
     }else{
 	//cout << "DEBUG: File " << _filename << " opened for reading." << endl;
@@ -127,6 +128,7 @@ void SkaarConfig::_writeDefaultConfig(){
     _ofstream.open(_filename.c_str(), ios::out | ios::app);
     
     if( ! _ofstream.is_open()){
+	_ofstream.close();
 	return;
     }
     
@@ -139,7 +141,8 @@ void SkaarConfig::_writeDefaultConfig(){
     _ofstream << "{" 									<< endl;
     _ofstream << "realname \"Lazy foo\"" 						<< endl;
     _ofstream << "nick coen__" 								<< endl;
-    _ofstream << "ui ncurses" 								<< endl;
+    _ofstream << "ui /usr/local/lib/libncursesui.so"					<< endl;
+    _ofstream << "defaultui /usr/local/lib/libdefault.ui.so"				<< endl;
     _ofstream << "}" 									<< endl;
     _ofstream 										<< endl;        
     _ofstream << "# Servers" 								<< endl;
@@ -233,10 +236,12 @@ void SkaarConfig::setSetting(string section, string setting, string value){
 bool SkaarConfig::writeConfig(){
     //cout << "DEBUG: Writing config." << endl;
     
-    ofstream _myofstream(_filename.c_str(), ios::in | ios::out | ios::app | ios::trunc);
+    ofstream _myofstream(_filename.c_str(), ios::in);
     
-    if( ! _myofstream.is_open()){
-	_myofstream.open(_filename.c_str(), ios::out | ios::app);
+    if(_myofstream.is_open()){
+	_myofstream.open(_filename.c_str(), ios::in | ios::out | ios::app | ios::trunc);
+    }else{
+	_myofstream.open(_filename.c_str(), ios::in | ios::out | ios::app);
     }
     
     _myofstream << "# README" << endl;
