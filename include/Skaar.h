@@ -22,6 +22,7 @@ private:
     map<string, string>		_messageAliases;
     map<string, Channel*>	_openChannels;
     User*			_user;
+    VirtualUI*			_ui;
     
     IRCConnection*		_activeConnection;
     Channel*			_activeChannel;
@@ -42,7 +43,7 @@ private:
     
     /*
      * Registers the user to skaar.
-     * If there is no user registerd,
+     * If there is no user registered,
      * skaar cannot connect.
      */
     bool _setUser(User* user);

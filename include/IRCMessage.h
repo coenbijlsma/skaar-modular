@@ -20,6 +20,10 @@
 #define SPACE " "
 #endif
 
+#ifndef IRC_LINE_MAX
+#define IRC_LINE_MAX 512
+#endif
+
 using namespace std;
     
 class IRCMessage {

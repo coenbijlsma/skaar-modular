@@ -1,12 +1,13 @@
 # README
-# This file contains the settings thas Skaar uses to run properly.
+# This file contains the settings that Skaar uses to run properly.
 
 # Core settings
 
 core
 {
-realname "Coen Bijlsma"
+realname "Lazy foo"
 nick coen__
+ui ncurses
 }
 
 
@@ -39,7 +40,7 @@ localhost #mychannel
 
 # Message aliases
 # You can also add your own aliases here.
-# The format a alias line is as follows:
+# The format of a alias line is as follows:
 # <alias> <command>
 
 aliases
