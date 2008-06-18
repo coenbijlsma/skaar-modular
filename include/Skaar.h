@@ -3,10 +3,13 @@
 
 #include <map>
 #include <string>
+#include <string.h> // strcpy()
+#include <sstream>
 #include <vector>
 
 #include "IRCConnection.h" 	// The connection
 //#include "IRCMessage.h"		// The messages
+#include "GenericMessage.h"	// Incoming messages
 #include "SkaarConfig.h"	// The configuration
 #include "User.h"		// The user
 #include "VirtualUI.h" 		// The UI

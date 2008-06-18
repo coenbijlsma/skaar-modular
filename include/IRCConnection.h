@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <netdb.h>
+#include <poll.h>
 
 #define DEFAULT_PORT 6667
 
@@ -30,6 +31,8 @@ class IRCConnection{
     struct sockaddr_in 	_addr;
     char* 		_host;
     int 		_port;
+    struct pollfd	_pfd[1];
+    int			_pollTimeoutMSecs; // Let poll() return immediately
 
 public:
     IRCConnection(char* host, int port);
@@ -61,6 +64,12 @@ public:
      * Retrieves a message from the server
      */
     char* 	readMessage();
+    
+    /*
+     * Polls the connection for events.
+     * See also poll(3)
+     */
+    int		pollConnection();
 };
 
 /*

@@ -85,6 +85,7 @@ void Skaar::init(){
     _registerUI(create_ui());
 }
 
+/* Registers an alias for a message */
 bool Skaar::registerMessageAlias(string message, string alias){
     _messageAliases[message] = alias;
     return true;
@@ -96,8 +97,47 @@ Channel* Skaar::getActiveChannel(){
 
 void Skaar::startWork(){
     _ui->printline("Starting my work...", false);
+    
+    /* XXX Create windows for each connection and channel */
+    SkaarConfigSection* _servers = _config->getSection("servers");
+    
+    if(_servers != 0){
+	map<string, string> _allServers = _servers->all();
+	for(map<string, string>::iterator iter = _allServers.begin(); iter != _allServers.end(); iter++){
+	    istringstream buf( (*iter).second);
+	    int _tport;
+	    buf >> _tport;
+	    int _strlen = (*iter).first.size();
+	    char* tmp = new char[_strlen +1];
+	    strcpy(tmp, (*iter).first.c_str());
+	    
+	    IRCConnection* _connection = new IRCConnection( tmp, _tport );
+	    if(_connection->createConnection()){
+		/* XXX Log on to irc */
+		_connections.push_back(_connection);
+	    }else{
+		delete _connection;
+	    }	    
+	}
+	
+	/* XXX Fix this */
+	while(1){
+	    for(int i = 0; i < _connections.size(); i++){
+		IRCConnection* _tconn = _connections.at(i);
+		if(_tconn->pollConnection() > 0){
+		    /* Do something */
+		    GenericMessage* _gm = new GenericMessage(string(_tconn->readMessage()));
+		    string _tstr = _gm->translate();
+		    if( (! _tstr.empty()) &&  _tstr.c_str() != 0 ){
+			_ui->printline( _gm->translate(), false);
+		    }
+		}
+	    }
+	}
+    }
 }
 
+/* Returns the user */
 const User* Skaar::getUser(){
     return (User*)0;
 }

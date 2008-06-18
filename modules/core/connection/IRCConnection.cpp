@@ -16,8 +16,8 @@ IRCConnection::IRCConnection(char* host, int port){
 	_host = inet_ntoa(*((struct in_addr*)h->h_addr));
     }
     
-    _connected = true;
-    
+    _connected = false;
+    _pollTimeoutMSecs = 0;
 }
 
 IRCConnection::~IRCConnection(){
@@ -57,6 +57,11 @@ bool IRCConnection::createConnection(){
     
     printf("Connected to %s:%d\n", _host, _port);
     _connected = true;
+    
+    /* Setup polling */
+    _pfd[0].fd = _fd;
+    _pfd[0].events = POLLRDNORM;
+    
     return true;
 }
 
@@ -128,6 +133,10 @@ char* IRCConnection::readMessage(){
     }
     
     return temp_msg;
+}
+
+int IRCConnection::pollConnection(){
+    return poll(_pfd, 1, _pollTimeoutMSecs);
 }
 
 // CLASS FACTORIES

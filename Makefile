@@ -22,7 +22,7 @@ help:
 	@echo "libircconnection, libircchannel, libskaartools, libskaarconfig -libskaaruser, lib*ui, lib*message"
 
 build:
-	$(COMPILER) -I$(HEADERSDIR) -combine main.cpp Skaar.cpp -ldl -lircconnection -lircchannel -lskaartools -lskaarconfig -lskaaruser -ldefaultui -o $(EXECNAME) -v
+	$(COMPILER) -I$(HEADERSDIR) -combine main.cpp Skaar.cpp -ldl -lircconnection -lircchannel -lskaartools -lskaarconfig -lskaaruser -ldefaultui -lgenericmessage -o $(EXECNAME) -v
 
 install: indeedroot build
 # XXX INSTALL LIBRARIES
