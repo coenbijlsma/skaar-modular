@@ -10,7 +10,20 @@ using namespace std;
 class VirtualUI {
 
 public:
-    virtual bool 	printline(string line,  bool error) =0;
+
+    /*
+     * Prints the provided chars to the UI 
+     */
+    virtual bool 	print(string chars,  bool error) =0;
+    
+    /*
+     * Appends the newline character to the line, and prints the line.
+     */
+    virtual bool	printline(string ln, bool error) =0;
+    
+    /*
+     * Reads a line from the UIs' input
+     */
     virtual string 	readline() =0;    
 };
 

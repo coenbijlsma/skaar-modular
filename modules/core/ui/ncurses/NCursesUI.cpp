@@ -13,13 +13,18 @@ public:
 	initscr();
     }
     
-    bool printline(string line, bool error){
+    bool print(string line, bool error){
 	if(printw(line.c_str()) != OK){
 	    refresh();
 	    return false;
 	}
 	refresh();
 	return true;
+    }
+    
+    bool printline(string line, bool error){
+	line.append("\n");
+	return print(line, error);
     }
     
     string readline(){

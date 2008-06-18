@@ -12,13 +12,18 @@ public:
     
     ~DefaultUI(){}
     
-    bool printline(string ln, bool error){
+    bool print(string ln, bool error){
 	if(error){
-	    cerr << ln << endl;
+	    cerr << ln;
 	}else{
-	    cout << ln << endl;
+	    cout << ln;
 	}
 	return true;
+    }
+    
+    bool printline(string ln, bool error){
+	ln.append("\n");
+	return print(ln, error);
     }
     
     string readline(){

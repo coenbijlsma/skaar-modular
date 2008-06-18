@@ -29,8 +29,7 @@ bool Skaar::_setUser(User* user){
 }
 
 /* Constructor */
-Skaar::Skaar(){
-}
+Skaar::Skaar(){}
 
 /* Destructor */
 Skaar::~Skaar(){
@@ -46,6 +45,7 @@ Skaar::~Skaar(){
     /* Load destroy symbol */
     destroy_ui_t* destroy_ui = (destroy_ui_t*) dlsym(_dlUI, "destroy_ui");
     
+    /* Clean up the UI */
     destroy_ui(_ui);
     dlclose(_dlUI);
 }
