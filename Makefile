@@ -1,17 +1,17 @@
 
 INSTALLDIR=/usr/bin
-VERSION=1
-MINOR=0
+VERSION=0
+MINOR=1
 COMPILER=g++
 HEADERSDIR=include
 EXECNAME=skaar
 
 help:
 	@echo "Usage:" 
-	@echo "make build		Builds the module $(LIBNAME).$(VERSION).$(MINOR)"
-	@echo "make install		Builds and installs the module in $(INSTALLDIR)."
+	@echo "make build		Builds the executable $(EXECNAME) version $(VERSION).$(MINOR)"
+	@echo "make install		Builds and installs the executable in $(INSTALLDIR)."
 	@echo "			You needs root privileges for this."
-	@echo "make uninstall		Removes the installed module and it's symlinks."
+	@echo "make uninstall		Removes $(EXECNAME)."
 	@echo "			Also needs root privileges."
 	@echo "make clean		Cleans up the files created at build-time."
 	@echo "make distclean		Uninstalls the module and cleans this directory."
