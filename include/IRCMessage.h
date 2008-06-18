@@ -50,6 +50,22 @@ public:
     virtual string translate() =0;
     
     /*
+     * Formats the message following the
+     * format string provided.
+     * The format options are:
+     *
+     * %t (time in the format HH:MM)
+     * %p (message prefix)
+     * %s (user status (op etc))
+     * %u (user nickname)
+     * %m (actual message. If omitted 
+     *    it will be appended to the string)
+     * %r (raw message. Omits %m)
+     *
+     */
+    virtual string format(string format) =0;
+    
+    /*
      * Returns the prefix of the message.
      * The message only contains a prefix
      * when the message is sent from the 
