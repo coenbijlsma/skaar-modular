@@ -4,7 +4,60 @@
 
 /* Registers the UI to print output to */
 bool Skaar::_registerUI(VirtualUI* ui){
+    if(_ui != 0){
+	
     _ui = ui;
+}
+
+/* Initializes the UI */
+void Skaar::_initUI(){
+    /* Initialize the UI */
+    string UIlib = _config->getValue(string("core"), string("ui"));
+    string _error;
+    
+    _dlUI = dlopen(UIlib.c_str(), RTLD_LAZY);
+    
+    if( ! _dlUI){
+	cerr << "Cannot load library " << UIlib << ": " << dlerror() << " Trying default UI." << endl;
+	
+	_dlUI = dlopen(_config->getValue(string("core"), string("defaultui")).c_str(), RTLD_LAZY );
+	
+	if( ! _dlUI){
+	    throw "Cannot load default ui, exiting.";
+	}
+    }
+    
+    /* Reset dlerror() */
+    dlerror();
+    
+    /* Load create symbol */
+    create_ui_t* create_ui = (create_ui_t*) dlsym(_dlUI, "create_ui");
+    const char* dlsym_error = dlerror();
+    
+    if(dlsym_error){
+	_error = string("Cannot load symbol create_ui: ");
+	_error.append(dlsym_error);
+	throw _error;
+    }
+    
+    _registerUI(create_ui());
+}
+
+/* Destroys the UI */
+void Skaar::_destroyUI(VirtualUI* ui){
+    if( ui != 0){
+	destroy_ui_t* destroy_ui = (destroy_ui_t*) dlsym(_dlUI, "destroy_ui");
+	const char* dlsym_error = dlerror();
+	
+	if(dlsym_error){
+	    cerr << "Could not load symbol destroy_ui: " << dlsym_error << endl;
+	    delete ui;
+	    return;
+	}
+	
+	destroy_ui(ui);
+	dlclose(_dlUI);
+    }
 }
 
 /* Registers a RFC 1459 message for use */
@@ -42,47 +95,19 @@ Skaar::~Skaar(){
     delete _config;
     delete _user;
     
-    /* Load destroy symbol */
-    destroy_ui_t* destroy_ui = (destroy_ui_t*) dlsym(_dlUI, "destroy_ui");
-    
-    /* Clean up the UI */
-    destroy_ui(_ui);
-    dlclose(_dlUI);
+    _destroyUI(_ui);
 }
 
 /* Initializes Skaar */
 void Skaar::init(){
+    /* Read the config */
     _config = new SkaarConfig();
     
-    string UIlib = _config->getValue(string("core"), string("ui"));
-    string _error;
+    /* Initialize the UI */
+    _initUI();
     
-    _dlUI = dlopen(UIlib.c_str(), RTLD_LAZY);
+    /* Register the messages and their aliases */
     
-    if( ! _dlUI){
-	cerr << "Cannot load library " << UIlib << ": " << dlerror() << " Trying default UI." << endl;
-	
-	_dlUI = dlopen(_config->getValue(string("core"), string("defaultui")).c_str(), RTLD_LAZY );
-	
-	if( ! _dlUI){
-	    throw "Cannot load default ui, exiting.";
-	}
-    }
-    
-    /* Reset dlerror() */
-    dlerror();
-    
-    /* Load create symbol */
-    create_ui_t* create_ui = (create_ui_t*) dlsym(_dlUI, "create_ui");
-    const char* dlsym_error = dlerror();
-    
-    if(dlsym_error){
-	_error = string("Cannot load symbol create_ui: ");
-	_error.append(dlsym_error);
-	throw _error;
-    }
-    
-    _registerUI(create_ui());
 }
 
 /* Registers an alias for a message */

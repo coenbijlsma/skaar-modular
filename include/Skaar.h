@@ -32,13 +32,25 @@ private:
     
     IRCConnection*		_activeConnection;
     Channel*			_activeChannel;
-        
+    
+    
     /* 
      * Registers the UI to print output to,
      * and read input from. This defaults to
      * the stdin and stdout on the terminal.
      */
     bool _registerUI(VirtualUI* ui);
+    
+    /* 
+     * Finds the UI to be loaded, and tries to load it.
+     *
+     * @throws string If loading the UI library fails.
+     */
+    void _initUI();
+    /*
+     * Destroys the provided VirtualUI*.
+     */
+    void _destroyUI(VirtualUI* ui);
     
     /*
      * Registers a command that represents
