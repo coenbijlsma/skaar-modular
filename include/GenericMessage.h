@@ -12,22 +12,22 @@ using namespace std;
 
 class GenericMessage {
 private:
-    string 			_raw;
-    string			_command;
-    string			_prefix;
-    vector<string> 		_params;
+    string 		_raw;
+    string		_command;
+    string		_prefix;
+    vector<string> 	_params;
 
-    void 			_init();
+    void 		_init();
 
 public:
     
     GenericMessage(string raw);
     ~GenericMessage();
     
-    string 			translate();
-    const string 		prefix();
-    const string 		command();
-    const vector<string> 	params();
+    string		translate();
+    string 		prefix();
+    string 		command();
+    vector<string> 	params();
         
 };
 

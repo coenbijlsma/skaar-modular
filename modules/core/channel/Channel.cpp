@@ -2,7 +2,7 @@
 
 Channel::Channel(IRCConnection* conn, string name){
     if(name.empty()){
-	throw "A channelname cannot be empty.\n";
+	throw "The channelname cannot be empty.\n";
     }
     if(conn == 0 || ! conn->connected()){
 	throw "The connection for this channel cannot be empty.";
@@ -18,8 +18,16 @@ const IRCConnection* Channel::getConnection(){
     return _connection;
 }
 
-const string Channel::getName(){
+string Channel::getName(){
     return _name;
+}
+
+string Channel::getTopic(){
+    return _topic;
+}
+
+void Channel::setTopic(string topic){
+    _topic = topic;
 }
 
 extern "C" Channel* create_channel(IRCConnection* conn, string name){

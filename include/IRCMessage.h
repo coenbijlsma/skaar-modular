@@ -33,7 +33,7 @@ public:
     /*
      * Returns the command of the message
      */
-    virtual const string command() =0;
+    virtual string command() =0;
     
     /*
      * Returns the minimum amount of 
@@ -41,7 +41,7 @@ public:
      * This is needed to validate the message
      * before it gets out.
      */
-    virtual const unsigned int minParams() =0;
+    virtual unsigned int minParams() =0;
     
     /*
      * Translates the raw message
@@ -63,6 +63,7 @@ public:
      * %r (raw message. Omits %m)
      *
      */
+     /* XXX */
 //    virtual string format(string format) =0;
     
     /*
@@ -71,13 +72,13 @@ public:
      * when the message is sent from the 
      * server to the client.
      */
-    virtual const string prefix() =0;
+    virtual string prefix() =0;
     
     /*
      * Returns the parameters that this
      * message contains.
      */
-    virtual const vector<string> params() =0;
+    virtual vector<string> params() =0;
     
     /*
      * Sets the user who sends this message.

@@ -1,9 +1,9 @@
-#ifndef NICKMESSAGE_H
-#define NICKMESSAGE_H
+#ifndef OPERMESSAGE_H
+#define OPERMESSAGE_H
 
-#define NICKMESSAGE_COMMAND "NICK"
-#define NICKMESSAGE_MINPARAMS 1
-#define NICKMESSAGE_MAXPARAMS 2
+#define OPERMESSAGE_COMMAND "OPER"
+#define OPERMESSAGE_MINPARAMS 1
+#define OPERMESSAGE_MAXPARAMS 2
 
 #include <iostream> // DEBUG ONLY
 #include <string>
@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class NickMessage : public IRCMessage {
+class OperMessage : public IRCMessage {
 private:
     string		_raw;
     vector<string> 	_params;
@@ -23,8 +23,8 @@ private:
     
 public:
     
-    NickMessage(string raw);
-    ~NickMessage();
+    OperMessage(string raw);
+    ~OperMessage();
     
     string 		translate();
     string 		prefix();
@@ -33,10 +33,10 @@ public:
     bool 		transmit(IRCConnection* conn);
     
     string 		command();
-    unsigned int 	minParams();
+    unsigned int	minParams();
 };
 
-typedef NickMessage* create_nickmessage_t(string raw);
-typedef void destroy_nickmessage_t(NickMessage*);
+typedef OperMessage* create_opermessage_t(string raw);
+typedef void destroy_opermessage_t(OperMessage*);
 
 #endif

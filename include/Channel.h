@@ -10,13 +10,17 @@ class Channel {
 private:
     IRCConnection*	_connection;
     string 		_name;
+    string		_topic;
         
 public:
     Channel(IRCConnection* conn, string name);
     ~Channel();
     
     const IRCConnection* getConnection();
-    const string getName();
+    string getName();
+    string getTopic();
+    void setTopic(string topic);
+    
 };
 
 typedef Channel* create_channel_t(IRCConnection*, string);

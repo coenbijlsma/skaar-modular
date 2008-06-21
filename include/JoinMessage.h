@@ -15,25 +15,25 @@ using namespace std;
 
 class JoinMessage : public IRCMessage {
 private:
-    string			_raw;
-    vector<string> 		_params;
-    User*			_user;
+    string		_raw;
+    vector<string>	_params;
+    User*		_user;
     
-    void			_init();
+    void		_init();
     
 public:
     
     JoinMessage(string raw);
     ~JoinMessage();
     
-    string 			translate();
-    const string 		prefix();
-    const vector<string> 	params();
-    void 			setUser(User* user);
-    bool 			transmit(IRCConnection* conn);
+    string 		translate();
+    string 		prefix();
+    vector<string> 	params();
+    void 		setUser(User* user);
+    bool 		transmit(IRCConnection* conn);
     
-    const string 		command();
-    const unsigned int 		minParams();
+    string 		command();
+    unsigned int	minParams();
 };
 
 typedef JoinMessage* create_joinmessage_t(string raw);

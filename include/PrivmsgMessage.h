@@ -15,28 +15,28 @@ using namespace std;
 
 class PrivmsgMessage : public IRCMessage {
 private:
-    string			_raw;
-    vector<string> 		_params;
-    string			_receiver;
-    User*			_user;
+    string		_raw;
+    vector<string> 	_params;
+    string		_receiver;
+    User*		_user;
     
-    void			_init();
+    void		_init();
     
 public:
     
     PrivmsgMessage(string raw);
     ~PrivmsgMessage();
     
-    string 			translate();
-    const string 		prefix();
-    const vector<string> 	params();
-    const vector<string>	receivers();
-    void 			setUser(User* user);
-    void			setReceiver(string rcv);
-    bool 			transmit(IRCConnection* conn);
+    string 		translate();
+    string 		prefix();
+    vector<string> 	params();
+    vector<string>	receivers();
+    void 		setUser(User* user);
+    void		setReceiver(string rcv);
+    bool 		transmit(IRCConnection* conn);
     
-    const string 		command();
-    const unsigned int 		minParams();
+    string 		command();
+    unsigned int 	minParams();
 };
 
 typedef PrivmsgMessage* create_privmsgmessage_t(string raw);

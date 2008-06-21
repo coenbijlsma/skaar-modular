@@ -25,7 +25,7 @@ void UserMessage::_init(){
 	throw string("Not enough parameters supplied in message ") + _raw;
     }
     
-    /* Check if the message really is a nick message */
+    /* Check if the message really is a user message */
     // XXX ALIASES
     if(string(st.next()).substr(1) != USERMESSAGE_COMMAND){
 	throw string("Not a ") + string(USERMESSAGE_COMMAND) + string(" message: ") + _raw;
