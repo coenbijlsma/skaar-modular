@@ -16,7 +16,7 @@ void GenericMessage::_init(){
     /* Remove the trailing CRLF */
     string::size_type loc = _raw.find(CRLF, 0);
     if(loc != string::npos){
-	_raw = _raw.erase(loc);
+	//_raw = _raw.erase(loc);
     }
     
     StringTokenizer st(_raw, ' ');

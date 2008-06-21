@@ -63,7 +63,7 @@ public:
      * %r (raw message. Omits %m)
      *
      */
-    virtual string format(string format) =0;
+//    virtual string format(string format) =0;
     
     /*
      * Returns the prefix of the message.

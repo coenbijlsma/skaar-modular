@@ -27,6 +27,6 @@ void SkaarConfigSection::set(string setting, string value){
     _entries[setting] = value;
 }
 
-const map<string, string> SkaarConfigSection::all(){
+map<string, string> SkaarConfigSection::all(){
     return _entries;
 }

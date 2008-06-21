@@ -7,6 +7,7 @@ core
 {
 realname "Lazy foo"
 nick coen__
+password foo
 ui /usr/local/lib/libncursesui.so
 defaultui /usr/local/lib/libdefault.ui.so
 }

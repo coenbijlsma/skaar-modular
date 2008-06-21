@@ -1,6 +1,8 @@
 #ifndef SKAAR_H
 #define SKAAR_H
 
+#define MESSAGECOUNT 25
+
 #include <map>
 #include <string>
 #include <string.h> // strcpy()
@@ -14,6 +16,11 @@
 #include "User.h"		// The user
 #include "VirtualUI.h" 		// The UI
 #include "Channel.h"
+#include "SkaarLog.h"
+
+#include "PassMessage.h"
+#include "NickMessage.h"
+#include "UserMessage.h"
 
 using namespace std;
 
@@ -21,6 +28,7 @@ class Skaar {
 
 private:
     SkaarConfig* 		_config;
+    SkaarLog*			_log;
     vector<IRCConnection*> 	_connections;
     vector<string>		_registeredMessages;
     map<string, string>		_messageAliases;
@@ -33,7 +41,8 @@ private:
     IRCConnection*		_activeConnection;
     Channel*			_activeChannel;
     
-    
+    string			_messages[MESSAGECOUNT];
+
     /* 
      * Registers the UI to print output to,
      * and read input from. This defaults to
@@ -47,6 +56,7 @@ private:
      * @throws string If loading the UI library fails.
      */
     void _initUI();
+    
     /*
      * Destroys the provided VirtualUI*.
      */
@@ -60,11 +70,23 @@ private:
     bool _registerMessage(string name);
     
     /*
+     * Registers the message aliases
+     */
+    void _registerMessageAliases();
+    
+    /*
      * Registers the user to skaar.
      * If there is no user registered,
      * skaar cannot connect.
      */
     bool _setUser(User* user);
+    
+    /*
+     * Creates a connection to the 
+     * provided server and registers 
+     * the user.
+     */
+    bool _registerAt(string server, int port);
     
 public:
 

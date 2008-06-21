@@ -140,7 +140,8 @@ void SkaarConfig::_writeDefaultConfig(){
     _ofstream << "core" 								<< endl;
     _ofstream << "{" 									<< endl;
     _ofstream << "realname \"Lazy foo\"" 						<< endl;
-    _ofstream << "nick coen__" 								<< endl;
+    _ofstream << "nick myname__"							<< endl;
+    _ofstream << "password foo"								<< endl;
     _ofstream << "ui /usr/local/lib/libncursesui.so"					<< endl;
     _ofstream << "defaultui /usr/local/lib/libdefaultui.so"				<< endl;
     _ofstream << "}" 									<< endl;

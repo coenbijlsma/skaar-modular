@@ -12,7 +12,9 @@ int main(int argc, char** argv){
     
     try{
 	skaar->init();
+	//cout << "INIT" << endl;
 	skaar->startWork();
+	cout << "startWork()" << endl;
     }catch(string msg){
 	cerr << msg << endl;
 	delete skaar;

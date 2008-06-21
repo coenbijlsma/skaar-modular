@@ -19,10 +19,10 @@ help:
 	@echo "make help		Shows this message"
 	@echo
 	@echo "Dependencies:"
-	@echo "libircconnection, libircchannel, libskaartools, libskaarconfig -libskaaruser, lib*ui, lib*message"
+	@echo "libskaarlog, libircconnection, libircchannel, libskaartools, libskaarconfig -libskaaruser, lib*ui, lib*message"
 
 build:
-	$(COMPILER) -I$(HEADERSDIR) -combine main.cpp Skaar.cpp -ldl -lircconnection -lircchannel -lskaartools -lskaarconfig -lskaaruser -ldefaultui -lgenericmessage -o $(EXECNAME) -v
+	$(COMPILER) -I$(HEADERSDIR) -combine main.cpp Skaar.cpp -ldl -lskaarlog -lircconnection -lircchannel -lskaartools -lskaarconfig -lskaaruser -ldefaultui -lpassmessage -lnickmessage -lusermessage -lgenericmessage -o $(EXECNAME) -v
 
 install: indeedroot build
 # XXX INSTALL LIBRARIES

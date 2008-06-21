@@ -19,7 +19,7 @@ public:
     string			name();
     string 			get(string setting);
     void			set(string setting, string value);
-    const map<string, string> 	all();
+    map<string, string> 	all();
     
 };
 
