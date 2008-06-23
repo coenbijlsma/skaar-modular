@@ -1,17 +1,17 @@
-#include "UserMessage.h"
+#include "TopicMessage.h"
 #include "StringTokenizer.h"
 
 /* Constructor */
-UserMessage::UserMessage(string raw){
+TopicMessage::TopicMessage(string raw){
     _raw = raw;
     _init();
 }
 
 /* Destructor */
-UserMessage::~UserMessage(){}
+TopicMessage::~TopicMessage(){}
 
 /* Initializes the message */
-void UserMessage::_init(){
+void TopicMessage::_init(){
     
     /* Check if the message even has content */
     if(_raw.empty()){
@@ -21,19 +21,19 @@ void UserMessage::_init(){
     StringTokenizer st(_raw, ' ');
     string _tmp;
     
-    if(st.count() < (USERMESSAGE_MINPARAMS +1) ){
+    if(st.count() < (TOPICMESSAGE_MINPARAMS +1) ){
 	throw string("Not enough parameters supplied in message ") + _raw;
     }
     
     /* Check if the message really is a user message */
-    if(string(st.next()).substr(1) != USERMESSAGE_COMMAND){
-	throw string("Not a ") + string(USERMESSAGE_COMMAND) + string(" message: ") + _raw;
+    if(string(st.next()).substr(1) != TOPICMESSAGE_COMMAND){
+	throw string("Not a ") + string(TOPICMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
     /* Read the parameters */
     for(int i = 0; st.hasNext(); i++){
 	/* If we reach the last parameter, put them together */
-	if(i == (USERMESSAGE_MAXPARAMS -1)){
+	if(i == (TOPICMESSAGE_MAXPARAMS -1)){
 	    while(st.hasNext()){
 		_tmp.append( _tmp.empty() ? "" : SPACE );
 		_tmp.append( (string(st.next())) );
@@ -46,10 +46,10 @@ void UserMessage::_init(){
 }
 
 /* Translate the message to an RFC string */
-string UserMessage::translate(){
+string TopicMessage::translate(){
     
     string _tmp;
-    _tmp.append(USERMESSAGE_COMMAND);
+    _tmp.append(TOPICMESSAGE_COMMAND);
 
     for(int i = 0; i < _params.size(); i++){
 	_tmp.append(SPACE);
@@ -62,23 +62,23 @@ string UserMessage::translate(){
 }
 
 /* Return the prefix */
-const string UserMessage::prefix(){
+string TopicMessage::prefix(){
     // NOT IMPLEMENTED
     return "";
 }
 
 /* Return the parameters of this message */
-const vector<string> UserMessage::params(){
+vector<string> TopicMessage::params(){
     return _params;
 }
 
 /* Sets the user that sends this message */
-void UserMessage::setUser(User* user){
+void TopicMessage::setUser(User* user){
     _user = user;
 }
 
 /* Transmits the message to the server */
-bool UserMessage::transmit(IRCConnection* conn){
+bool TopicMessage::transmit(IRCConnection* conn){
     if(conn == 0 || ! conn->connected()){
 	throw "Not connected!";
     }
@@ -86,23 +86,23 @@ bool UserMessage::transmit(IRCConnection* conn){
 }
 
 /* Returns the command */
-const string UserMessage::command(){
-    return USERMESSAGE_COMMAND;
+string TopicMessage::command(){
+    return TOPICMESSAGE_COMMAND;
 }
 
 /* Returns the minimum amount of parameters needed */
-const unsigned int UserMessage::minParams(){
-    return USERMESSAGE_MINPARAMS;
+unsigned int TopicMessage::minParams(){
+    return TOPICMESSAGE_MINPARAMS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //			   CLASS FACTORY METHODS			      //
 ////////////////////////////////////////////////////////////////////////////////
 
-extern "C" UserMessage* create_usermessage(string raw){
-    return new UserMessage(raw);
+extern "C" TopicMessage* create_topicmessage(string raw){
+    return new TopicMessage(raw);
 }
 
-extern "C" void destroy_usermessage(UserMessage* message){
+extern "C" void destroy_topicmessage(TopicMessage* message){
     delete message;
 }

@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "InviteMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/INVITE foo #bar");
+	InviteMessage* im = new InviteMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << im->translate() << endl;
+	delete im;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

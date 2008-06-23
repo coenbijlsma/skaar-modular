@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "TraceMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/TRACE irc.efnet.nl");
+	TraceMessage* tm = new TraceMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << tm->translate() << endl;
+	delete tm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

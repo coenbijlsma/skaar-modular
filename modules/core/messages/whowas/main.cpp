@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "WhowasMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/WHOWAS Trillian 1 *.edu") ;
+	WhowasMessage* wm = new WhowasMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << wm->translate() << endl;
+	delete wm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

@@ -68,17 +68,17 @@ string PrivmsgMessage::translate(){
 }
 
 /* Return the prefix */
-const string PrivmsgMessage::prefix(){
+string PrivmsgMessage::prefix(){
     // NOT IMPLEMENTED
     return "";
 }
 
 /* Return the parameters of this message */
-const vector<string> PrivmsgMessage::params(){
+vector<string> PrivmsgMessage::params(){
     return _params;
 }
 
-const string PrivmsgMessage::receiver(){
+string PrivmsgMessage::receiver(){
     return _receiver;
 }
 
@@ -100,12 +100,12 @@ bool PrivmsgMessage::transmit(IRCConnection* conn){
 }
 
 /* Returns the command */
-const string PrivmsgMessage::command(){
+string PrivmsgMessage::command(){
     return PRIVMSGMESSAGE_COMMAND;
 }
 
 /* Returns the minimum amount of parameters needed */
-const unsigned int PrivmsgMessage::minParams(){
+unsigned int PrivmsgMessage::minParams(){
     return PRIVMSGMESSAGE_MINPARAMS;
 }
 
@@ -113,10 +113,10 @@ const unsigned int PrivmsgMessage::minParams(){
 //			   CLASS FACTORY METHODS			      //
 ////////////////////////////////////////////////////////////////////////////////
 
-extern "C" PrivmsgMessage* create_nickmessage(string raw){
+extern "C" PrivmsgMessage* create_privmsgmessage(string raw){
     return new PrivmsgMessage(raw);
 }
 
-extern "C" void destroy_nickmessage(PrivmsgMessage* message){
+extern "C" void destroy_privmsgmessage(PrivmsgMessage* message){
     delete message;
 }

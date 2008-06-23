@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "PingMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/PING foo");
+	PingMessage* pm = new PingMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << pm->translate() << endl;
+	delete pm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "KickMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/KICK #test foo You are a bitch");
+	KickMessage* km = new KickMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << km->translate() << endl;
+	delete km;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

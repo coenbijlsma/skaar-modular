@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "NoticeMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/NOTICE coen What's up?");
+	NoticeMessage* nm = new NoticeMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << nm->translate() << endl;
+	delete nm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

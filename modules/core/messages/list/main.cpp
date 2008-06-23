@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "ListMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/LIST #test irc.efnet.nl");
+	ListMessage* lm = new ListMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << lm->translate() << endl;
+	delete lm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

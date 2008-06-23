@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "AdminMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/ADMIN irc.efnet.nl");
+	AdminMessage* am = new AdminMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << am->translate() << endl;
+	delete am;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

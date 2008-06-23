@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "StatsMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/STATS m irc.efnet.nl");
+	StatsMessage* sm = new StatsMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << sm->translate() << endl;
+	delete sm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

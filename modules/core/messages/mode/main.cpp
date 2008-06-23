@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "ModeMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/MODE #testchannel +im");
+	ModeMessage* mm = new ModeMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << mm->translate() << endl;
+	delete nm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

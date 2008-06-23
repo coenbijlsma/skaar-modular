@@ -1,17 +1,17 @@
-#include "UserMessage.h"
+#include "ModeMessage.h"
 #include "StringTokenizer.h"
 
 /* Constructor */
-UserMessage::UserMessage(string raw){
+ModeMessage::ModeMessage(string raw){
     _raw = raw;
     _init();
 }
 
 /* Destructor */
-UserMessage::~UserMessage(){}
+ModeMessage::~ModeMessage(){}
 
 /* Initializes the message */
-void UserMessage::_init(){
+void ModeMessage::_init(){
     
     /* Check if the message even has content */
     if(_raw.empty()){
@@ -21,39 +21,29 @@ void UserMessage::_init(){
     StringTokenizer st(_raw, ' ');
     string _tmp;
     
-    if(st.count() < (USERMESSAGE_MINPARAMS +1) ){
-	throw string("Not enough parameters supplied in message ") + _raw;
+    if(st.count() < (MODEMESSAGE_MINPARAMS +1) || st.count() > (MODEMESSAGE_MAXPARAMS +1)){
+	throw string("Wrong parameter count in message ") + _raw;
     }
     
     /* Check if the message really is a user message */
-    if(string(st.next()).substr(1) != USERMESSAGE_COMMAND){
-	throw string("Not a ") + string(USERMESSAGE_COMMAND) + string(" message: ") + _raw;
+    if(string(st.next()).substr(1) != MODEMESSAGE_COMMAND){
+	throw string("Not a ") + string(MODEMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
     /* Read the parameters */
     for(int i = 0; st.hasNext(); i++){
-	/* If we reach the last parameter, put them together */
-	if(i == (USERMESSAGE_MAXPARAMS -1)){
-	    while(st.hasNext()){
-		_tmp.append( _tmp.empty() ? "" : SPACE );
-		_tmp.append( (string(st.next())) );
-	    }
-	    _params.push_back(_tmp);
-	}else{    
-	    _params.push_back(string(st.next()));
-	}
+	_params.push_back(string(st.next()));
     }
 }
 
 /* Translate the message to an RFC string */
-string UserMessage::translate(){
+string ModeMessage::translate(){
     
     string _tmp;
-    _tmp.append(USERMESSAGE_COMMAND);
+    _tmp.append(MODEMESSAGE_COMMAND);
 
     for(int i = 0; i < _params.size(); i++){
 	_tmp.append(SPACE);
-	_tmp.append( (i == _params.size() -1) ? ":" : ""); // prepend colon for the last parameter
 	_tmp.append(_params.at(i));
     }
     
@@ -62,23 +52,23 @@ string UserMessage::translate(){
 }
 
 /* Return the prefix */
-const string UserMessage::prefix(){
+const string ModeMessage::prefix(){
     // NOT IMPLEMENTED
     return "";
 }
 
 /* Return the parameters of this message */
-const vector<string> UserMessage::params(){
+const vector<string> ModeMessage::params(){
     return _params;
 }
 
 /* Sets the user that sends this message */
-void UserMessage::setUser(User* user){
+void ModeMessage::setUser(User* user){
     _user = user;
 }
 
 /* Transmits the message to the server */
-bool UserMessage::transmit(IRCConnection* conn){
+bool ModeMessage::transmit(IRCConnection* conn){
     if(conn == 0 || ! conn->connected()){
 	throw "Not connected!";
     }
@@ -86,23 +76,23 @@ bool UserMessage::transmit(IRCConnection* conn){
 }
 
 /* Returns the command */
-const string UserMessage::command(){
-    return USERMESSAGE_COMMAND;
+const string ModeMessage::command(){
+    return MODEMESSAGE_COMMAND;
 }
 
 /* Returns the minimum amount of parameters needed */
-const unsigned int UserMessage::minParams(){
-    return USERMESSAGE_MINPARAMS;
+const unsigned int ModeMessage::minParams(){
+    return MODEMESSAGE_MINPARAMS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //			   CLASS FACTORY METHODS			      //
 ////////////////////////////////////////////////////////////////////////////////
 
-extern "C" UserMessage* create_usermessage(string raw){
-    return new UserMessage(raw);
+extern "C" ModeMessage* create_modemessage(string raw){
+    return new ModeMessage(raw);
 }
 
-extern "C" void destroy_usermessage(UserMessage* message){
+extern "C" void destroy_modemessage(ModeMessage* message){
     delete message;
 }

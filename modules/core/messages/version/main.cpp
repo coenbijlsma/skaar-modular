@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
 
-#include "UserMessage.h"
+#include "VersionMessage.h"
 
 int main(int argc, char** argv){
     try{
-	string line("/USER coen 0 0 Coen Bijlsma");
-	UserMessage* um = new UserMessage(line);
+	string line("/VERSION irc.efnet.nl");
+	VersionMessage* vm = new VersionMessage(line);
 	
-	cout << um->translate() << endl;
-	delete um;
+	cout << vm->translate() << endl;
+	delete vm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;
