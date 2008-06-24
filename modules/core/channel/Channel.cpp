@@ -9,7 +9,12 @@ Channel::Channel(IRCConnection* conn, string name){
     }
     
     _connection = conn;
-    _name 	= name;
+    _name 	= name.substr(1);
+    _type	= name.at(0);
+    
+    if(_type != CHAN_NETWORK && _type != CHAN_LOCAL){
+	throw string("Channeltype not supported: ") + string(_type);
+    }
 }
 
 Channel::~Channel(){}
@@ -20,6 +25,10 @@ const IRCConnection* Channel::getConnection(){
 
 string Channel::getName(){
     return _name;
+}
+
+char Channel::getType(){
+    return _type;
 }
 
 string Channel::getTopic(){

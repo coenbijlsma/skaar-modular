@@ -20,28 +20,26 @@ void PrivmsgMessage::_init(){
     
     StringTokenizer st(_raw, ' ');
     
-    if(_raw.at(0) == '/'){
-	string _tmp;
-	if(st.count() < (PRIVMSGMESSAGE_MINPARAMS +1) ){
-	    throw string("Wrong parameter count in message ") + _raw;
-	}
-    
-	/* Check if the message really is a privmsg message */
-	// XXX ALIASES
-	if(string(st.next()).substr(1) != PRIVMSGMESSAGE_COMMAND){
-	    throw string("Not a ") + string(PRIVMSGMESSAGE_COMMAND) + string(" message: ") + _raw;
-	}
-	
-	/* Read the message */
-	while(st.hasNext()){
-	    _tmp.append(_tmp.empty() ? "" : SPACE);
-	    _tmp.append(string(st.next()));
-	}
-	
-	_params.push_back(_tmp);
-    }else{
-	_params.push_back(_raw);
+    string _tmp;
+    if(st.count() < (PRIVMSGMESSAGE_MINPARAMS +1) ){
+	throw string("Wrong parameter count in message ") + _raw;
     }
+    
+    /* Check if the message really is a privmsg message */
+    if(string(st.next()).substr(1) != PRIVMSGMESSAGE_COMMAND){
+	throw string("Not a ") + string(PRIVMSGMESSAGE_COMMAND) + string(" message: ") + _raw;
+    }
+
+    /* Add the receiver(s) */
+    _params.push_back(string(st.next()));
+    
+    /* Read the message */
+    while(st.hasNext()){
+	_tmp.append(_tmp.empty() ? "" : SPACE);
+	_tmp.append(string(st.next()));
+    }
+	
+    _params.push_back(_tmp);
 }
 
 /* Translate the message to an RFC string */
@@ -51,15 +49,9 @@ string PrivmsgMessage::translate(){
     _tmp.append(PRIVMSGMESSAGE_COMMAND);
     _tmp.append(SPACE);
     
-    /* Add the receiver(s) */
-    for(int i = 0; i < _receivers.size(); i++){
-	_tmp.append( i > 0 ? "," : "" );
-	_tmp.append(_receivers.at(i));
-    }
-    
     /* Add the message text */
     for(int i = 0; i < _params.size(); i++){
-	_tmp.append(i == 0 ? " :" : SPACE);
+	_tmp.append(i == 1 ? " :" : SPACE);
 	_tmp.append(_params.at(i));
     }
     
@@ -78,17 +70,9 @@ vector<string> PrivmsgMessage::params(){
     return _params;
 }
 
-string PrivmsgMessage::receiver(){
-    return _receiver;
-}
-
 /* Sets the user that sends this message */
 void PrivmsgMessage::setUser(User* user){
     _user = user;
-}
-
-void PrivmsgMessage::setReceiver(string recv){
-    _receiver = recv;
 }
 
 /* Transmits the message to the server */

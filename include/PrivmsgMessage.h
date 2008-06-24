@@ -17,7 +17,6 @@ class PrivmsgMessage : public IRCMessage {
 private:
     string		_raw;
     vector<string> 	_params;
-    string		_receiver;
     User*		_user;
     
     void		_init();
@@ -30,9 +29,7 @@ public:
     string 		translate();
     string 		prefix();
     vector<string> 	params();
-    vector<string>	receivers();
     void 		setUser(User* user);
-    void		setReceiver(string rcv);
     bool 		transmit(IRCConnection* conn);
     
     string 		command();
