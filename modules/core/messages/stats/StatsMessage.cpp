@@ -32,7 +32,25 @@ void StatsMessage::_init(){
     
     /* Read the parameters */
     for(int i = 0; st.hasNext(); i++){
-	_params.push_back(string(st.next()));
+	string _token = string(st.next());
+	if( i == 0 ){
+	    for(int j = 0; j < _token.size(); j++){
+		bool _legal = false;
+		for(int n = 0; n < ALLOWED_QUERIES.size(); n++){
+		    if(_token.at(j) == ALLOWED_QUERIES.at(n)){
+			_legal = true;
+		    }
+		}
+		
+		if( ! _legal ){
+		    string _message("Illegal query in message ");
+		    _message.append(_raw);
+		    throw _message;
+		}
+	    }
+	}
+	
+	_params.push_back(_token);	    
     }
 }
 

@@ -25,14 +25,34 @@ void ModeMessage::_init(){
 	throw string("Wrong parameter count in message ") + _raw;
     }
     
-    /* Check if the message really is a user message */
+    /* Check if the message really is a mode message */
     if(string(st.next()).substr(1) != MODEMESSAGE_COMMAND){
 	throw string("Not a ") + string(MODEMESSAGE_COMMAND) + string(" message: ") + _raw;
     }
     
     /* Read the parameters */
     for(int i = 0; st.hasNext(); i++){
-	_params.push_back(string(st.next()));
+	string _token = string(st.next());
+	if( i == 1){ // Modes
+	    for(int j = 0; j < _token.size(); j++){
+		bool _legal = false;
+		for(int n = 0; n < ALLOWED_MODES.size(); n++){
+		    if(_token.at(j) == ALLOWED_MODES.at(n)){
+			_legal = true;
+		    }
+		}
+		
+		if( ! _legal){
+		    string _message = "Unsupported mode char in message ";
+		    _message.append(_raw);
+		    throw _message;
+		}
+	    }
+	    
+	    _params.push_back(_token);
+	}else{
+	    _params.push_back(_token);
+	}
     }
 }
 
@@ -52,13 +72,13 @@ string ModeMessage::translate(){
 }
 
 /* Return the prefix */
-const string ModeMessage::prefix(){
+string ModeMessage::prefix(){
     // NOT IMPLEMENTED
     return "";
 }
 
 /* Return the parameters of this message */
-const vector<string> ModeMessage::params(){
+vector<string> ModeMessage::params(){
     return _params;
 }
 
@@ -76,12 +96,12 @@ bool ModeMessage::transmit(IRCConnection* conn){
 }
 
 /* Returns the command */
-const string ModeMessage::command(){
+string ModeMessage::command(){
     return MODEMESSAGE_COMMAND;
 }
 
 /* Returns the minimum amount of parameters needed */
-const unsigned int ModeMessage::minParams(){
+unsigned int ModeMessage::minParams(){
     return MODEMESSAGE_MINPARAMS;
 }
 

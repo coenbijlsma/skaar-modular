@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv){
     try{
-	string line("/WHO foo* o");
+	string line("/WHO foo* n");
 	WhoMessage* wm = new WhoMessage(line);
 	
 	cout << wm->translate() << endl;

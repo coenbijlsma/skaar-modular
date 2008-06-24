@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#define ALLOWED_QUERIES string("chiklmouy")
+
 #include "IRCMessage.h"
 
 using namespace std;

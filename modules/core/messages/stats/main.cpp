@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv){
     try{
-	string line("/STATS m irc.efnet.nl");
+	string line("/STATS c irc.efnet.nl");
 	StatsMessage* sm = new StatsMessage(line);
 	
 	cout << sm->translate() << endl;

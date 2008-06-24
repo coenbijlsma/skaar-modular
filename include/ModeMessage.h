@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#define ALLOWED_MODES string("biklmnopstvw+-")
+
 #include "IRCMessage.h"
 
 using namespace std;

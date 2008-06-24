@@ -5,11 +5,11 @@
 
 int main(int argc, char** argv){
     try{
-	string line("/MODE #testchannel +im");
+	string line("/MODE #testchannel +imz");
 	ModeMessage* mm = new ModeMessage(line);
 	
 	cout << mm->translate() << endl;
-	delete nm;
+	delete mm;
     }catch(string msg){
 	cout << "Error: " << msg << endl;
 	return 1;

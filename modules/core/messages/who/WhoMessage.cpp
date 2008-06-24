@@ -32,7 +32,14 @@ void WhoMessage::_init(){
     
     /* Read the parameters */
     for(int i = 0; st.hasNext(); i++){
-	_params.push_back(string(st.next()));
+	string _token = string(st.next());
+	
+	if( i == 1){
+	    if( _token != "o"){
+		throw string("The only parameter except for the name can be the character 'o'");
+	    }
+	}
+	_params.push_back(_token);
     }
 }
 
