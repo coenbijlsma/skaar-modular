@@ -56,6 +56,12 @@ public:
     void append(string log, loglevel_t severity = LOG_USER, bool add_extras = false);
     
     /*
+     * Effectively calls the function mentioned 
+     * above, wrapping a string around char* log.
+     */
+    void append(const char* log, loglevel_t severity = LOG_USER, bool add_extras = false);
+    
+    /*
      * Stores the inserted entries in the file.
      * If no filename is given in the constructor,
      * the filename will be skaar.log. If that fil

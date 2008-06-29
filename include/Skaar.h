@@ -1,8 +1,9 @@
 #ifndef SKAAR_H
 #define SKAAR_H
 
-#define MESSAGECOUNT 25
+#define MESSAGECOUNT 29
 
+#include <exception>
 #include <map>
 #include <string>
 #include <string.h> // strcpy()
@@ -10,7 +11,6 @@
 #include <vector>
 
 #include "IRCConnection.h" 	// The connection
-//#include "IRCMessage.h"		// The messages
 #include "GenericMessage.h"	// Incoming messages
 #include "SkaarConfig.h"	// The configuration
 #include "User.h"		// The user
@@ -18,9 +18,13 @@
 #include "Channel.h"
 #include "SkaarLog.h"
 
-#include "PassMessage.h"
-#include "NickMessage.h"
-#include "UserMessage.h"
+#include "Mitm.h"		// Man In The Middle for messages
+
+/* Exceptions */
+#include "ConfigException.h"
+#include "MessageException.h"
+#include "UIException.h"
+
 
 using namespace std;
 
@@ -34,13 +38,10 @@ private:
     map<string, string>		_messageAliases;
     map<string, Channel*>	_openChannels;
     User*			_user;
-    
-    void*			_dlUI;
+        
+    void*			_dlUI; // UI library
     VirtualUI*			_ui;
-    
-    IRCConnection*		_activeConnection;
     Channel*			_activeChannel;
-    
     string			_messages[MESSAGECOUNT];
 
     /* 
@@ -53,7 +54,7 @@ private:
     /* 
      * Finds the UI to be loaded, and tries to load it.
      *
-     * @throws string If loading the UI library fails.
+     * @throws UIException If loading the UI library fails.
      */
     void _initUI();
     
@@ -85,8 +86,40 @@ private:
      * Creates a connection to the 
      * provided server and registers 
      * the user.
+     *
+     * @throws MessageException if one of the 
+     * messages fails.
      */
     bool _registerAt(string server, int port);
+    
+    /*
+     * Handles the input from the IRCConnection*
+     */
+    void* _handleInput(void* ptr);
+    
+    /*
+     * Handles the output to IRCConnection*
+     *
+     * @throws UIException if no UI is present.
+     */
+    void* _handleOutput(void* ptr);
+    
+    /*
+     * Is called by pthread_create() and 
+     * executes Skaar::_handleInput()
+     */
+    static void* _c_handleInput(void* ptr);
+    
+    /*
+     * Is called by pthread_create() and
+     * executes Skaar::_handleOutput()
+     */
+    static void _c_handleOutput(void* ptr);
+    
+    /*
+     * Actually creates the threads for in- and output.
+     */
+    void _createThreads();
     
 public:
 
@@ -127,6 +160,9 @@ public:
      * After skaar has been initiated,
      * the real work can begin. It does 
      * so here.
+     *
+     * @throws ConfigException if the
+     * configuration isn't successfully read.
      */
     void startWork();
     
@@ -134,6 +170,12 @@ public:
      * Returns the current user.
      */
     const User* getUser();
+    
+    /*
+     * Checks if the provided alias is the alias
+     * for the provided command.
+     */
+    bool isAliasFor(string alias, string command);
         
 };
 

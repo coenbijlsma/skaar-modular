@@ -1,5 +1,9 @@
 #include "Skaar.h"
 
+#include "PassMessage.h"
+#include "NickMessage.h"
+#include "UserMessage.h"
+
 #include <dlfcn.h> // libraries
 
 /* Registers the UI to print output to */
@@ -25,7 +29,7 @@ void Skaar::_initUI(){
 	_dlUI = dlopen(_config->getValue(string("core"), string("defaultui")).c_str(), RTLD_LAZY );
 	
 	if( ! _dlUI){
-	    throw "Cannot load default ui, exiting.";
+	    throw UIException("Cannot load default UI, exiting.");
 	}
     }
     
@@ -39,7 +43,7 @@ void Skaar::_initUI(){
     if(dlsym_error){
 	_error = string("Cannot load symbol create_ui: ");
 	_error.append(dlsym_error);
-	throw _error;
+	throw UIException(_error.c_str());
     }
     
     _registerUI(create_ui());
@@ -123,7 +127,7 @@ bool Skaar::_registerAt(IRCConnection* conn){
 	PassMessage* _passmsg = new PassMessage(_spassmsg);
 		
 	if( ! _passmsg->transmit(_connection) ){
-	    throw "Could not send PASS message!";
+	    throw MessageException("Could not send PASS message!");
 	}
 		
 	string _snickmsg("/NICK ");
@@ -132,7 +136,7 @@ bool Skaar::_registerAt(IRCConnection* conn){
 	NickMessage* _nickmsg = new NickMessage(_snickmsg);
 		
 	if( ! _nickmsg->transmit(_connection) ){
-	    throw "Could not send NICK message!";
+	    throw MessageException("Could not send NICK message!");
 	}
 		
 	string _susermsg("/USER ");
@@ -144,14 +148,12 @@ bool Skaar::_registerAt(IRCConnection* conn){
 	UserMessage* _usermsg = new UserMessage(_susermsg);
 		
 	if( ! _usermsg->transmit(_connection) ){
-	    throw "Could not send USER message!";
+	    throw MessageException("Could not send USER message!");
 	}
 		
 	/* Store the connection */
 	_connections.push_back(_connection);
 	
-	/* Clean up */
-	delete _server;
 	return true;
     }else{
 	/* Clean up */
@@ -161,6 +163,88 @@ bool Skaar::_registerAt(IRCConnection* conn){
     }
 }
 
+/* Handles ths input from the current IRCConnection* */
+void* Skaar::_handleInput(void* ptr){
+    /* XXX FIXME this while(1) */
+    while(1){
+	for(int i = 0; i < _connections.size(); i++){
+	    IRCConnection* _tconn = _connections.at(i);
+	    if(_tconn->pollConnection() > 0){
+		/* Do something */
+		char* _tmp = _tconn->readMessage();
+
+		if(_tmp != 0 && _tmp != CRLF){
+		    string s(_tmp);
+		    GenericMessage* _gm = new GenericMessage(s);
+		    string _tstr = _gm->translate();
+		    if( (! _tstr.empty()) &&  _tstr.c_str() != 0 ){
+			_ui->print( _tstr, false);
+		    } // _tstr.empty() ...
+
+		} // _tmp != 0 ...
+		
+	    } // _tconn->pollConnection() > 0
+	    
+	} // for( ...; connections.size(); ...)
+	
+    } // while(1) XXX
+}
+
+/* 
+ * Writes the output to the current IRCConnection* .
+ * The output can be either a command or a message.
+ */
+void* Skaar::_handleOutput(void* ptr){
+    /* XXX This wile(1) */
+    if(_ui == 0){
+	throw UIException("I need and UI to read from, but currently no UI is working...");
+    }
+    
+    while(1){
+	string line = _ui->readline();
+	Mitm* mitm = new Mitm(this, line);
+	
+	/* Only send the message if there is an active connection */
+	if(_activeChannel != 0 && _activeChannel->getConnection() != 0){
+	    if(_activeChannel->getConnection()->sendMessage( mitm->translate() )){
+		// XXX
+		// _ui->printline(mitm->translate()->format(...);
+	    }
+	}
+	
+    } // while(1)
+}
+
+/* Calls _handleInput */
+static void* Skaar::_c_handleInput(void* ptr){
+    Skaar* s = static_cast<Skaar*>(ptr);
+    s->_handleInput(ptr);
+}
+
+/* Calls _handleOutput */
+static void* Skaar::_c_handleOutput(void* ptr){
+    Skaar* s = static_cast<Skaar*>(ptr);
+    s->_handleOutput(ptr);
+}
+
+void Skaar::_createThreads(){
+    /*
+     * Create threads to handle the input and output
+     */
+     pthread_t inputThread, outputThread;
+     
+     char* imsg = "Input";
+     char* omsg = "Output";
+     int inputRet, outputRet;
+     
+     inputRet = pthread_create(&inputThread, NULL, Skaar::_c_handleInput, (void*)imsg);
+     outputRet = pthread_create(&outputThread, NULL, Skaar::_c_handleOutput, (void*)omsg);
+     
+     pthread_join( inputThread, NULL);
+     pthread_join( outputThread, NULL);
+    
+}
+
 /* Constructor */
 Skaar::Skaar(){
     string _tmparray[] = {"PASS", "NICK", "USER", "OPER", "QUIT",
@@ -168,15 +252,13 @@ Skaar::Skaar(){
 		"LIST", "INVITE", "KICK", "VERSION", "STATS",
 		"LINKS", "TRACE", "ADMIN", "INFO", "PRIVMSG",
 		"NOTICE", "WHO", "WHOIS", "WHOWAS", "PONG",
-		""};
+		"PING", "OPER", "MODE", "AWAY", ""};
     
-    //cout << "Messages 1" << endl;
-    
-    for(int i = 0; i < MESSAGECOUNT; i++){
+    int i = 0;
+    while( ! _tmparray[i].empty() && I < MESSAGECOUNT){
 	_messages[i] = _tmparray[i];
     }
     
-    //cout << "Messages loop" << endl;
 }
 
 /* Destructor */
@@ -237,7 +319,7 @@ Channel* Skaar::getActiveChannel(){
     return (Channel*)0;
 }
 
-void Skaar::startWork(){
+void Skaar::startWork() {
     _ui->printline("Starting the works...", false);
     
     /* XXX Create windows for each connection and channel */
@@ -245,7 +327,7 @@ void Skaar::startWork(){
     SkaarConfigSection* _core = _config->getSection("core");
     
     if(_core == 0){
-	throw "Core section not found!";
+	throw ConfigException("Core configuration section not found!");
     }
     //cout << "Sections read" << endl;
     
@@ -272,7 +354,7 @@ void Skaar::startWork(){
     }
     
     if( ! _setUser(new User(_username, _nick, _password))){
-	throw "No user available!";
+	throw ConfigException("No user defined!");
     }
     
     /* Connect to the servers if any */
@@ -285,36 +367,30 @@ void Skaar::startWork(){
 	    _buf >> _port;
 	    
 	    /* Register the user at the server */
-	    _registerAt(_server, _port);	    
+	    if( ! _registerAt(_server, _port)){
+		    string _logstring = string("Could not register on server ");
+		    _logstring.append(_server);
+		
+		/* Log the error */    
+		if( _log != 0){
+		    _log->append(_logstring, SkaarLog::LOG_ERROR, true);
+		}else{
+		    _ui->printline(_logstring, true);
+		}
+	    }
 	}
     }
-    	
-    /* XXX FIXME this while(1) */
-    while(1){
-	for(int i = 0; i < _connections.size(); i++){
-	    IRCConnection* _tconn = _connections.at(i);
-	    if(_tconn->pollConnection() > 0){
-		/* Do something */
-		char* _tmp = _tconn->readMessage();
-
-		if(_tmp != 0 && _tmp != CRLF){
-		    string s(_tmp);
-		    GenericMessage* _gm = new GenericMessage(s);
-		    string _tstr = _gm->translate();
-		    if( (! _tstr.empty()) &&  _tstr.c_str() != 0 ){
-			_ui->print( _tstr, false);
-		    } // _tstr.empty() ...
-
-		} // _tmp != 0 ...
-		
-	    } // _tconn->pollConnection() > 0
-	    
-	} // for( ...; connections.size(); ...)
-	
-    } // while(1) XXX
+    
+    /* Create the input and output threads */
+    _createThreads(); 
 }
 
 /* Returns the user */
 const User* Skaar::getUser(){
-    return (User*)0;
+    return _user;
+}
+
+/* Returns if alias is a registered alias for command */
+bool Skaar::isAliasFor(string alias, string command){
+    return _messageAliases[alias] == command;
 }
