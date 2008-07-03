@@ -14,6 +14,6 @@ public:
 };
 
 typedef VirtualChatWindow* create_chatwindow_t();
-typedef void destroy_chatwindow_t(VirtualCharWindow*);
+typedef void destroy_chatwindow_t(VirtualChatWindow*);
 
 #endif
