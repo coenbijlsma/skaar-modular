@@ -14,6 +14,10 @@ public:
     Mitm(Skaar* skaar, string raw);
     ~Mitm();
     
+    /*
+     * Translates the privided raw string
+     * into an IRCMessage*
+     */
     IRCMessage* translate();
 };
 

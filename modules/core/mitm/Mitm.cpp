@@ -58,15 +58,19 @@ IRCMessage* Mitm::translate(){
     
     
     if(_skaar->isAliasFor(_command, QUITMESSAGE_COMMAND){
+	/* Closes the connection to the current active server */
 	_tmp = new QuitMessage( string(QUITMESSAGE_COMMAND) + _rawNoCmd );
 	
     }else if(_skaar->isAliasFor(_command, NICKMESSAGE_COMMAND){
+	/* Either registers the nick for the user or changes the nick */
 	_tmp = new NickMessage( string(NICKMESSAGE_COMMAND) + _rawNoCmd );
 	
     }else if(_skaar->isAliasFor(_command, PASSMESSAGE_COMMAND){
+	/* Sets a connection password */
 	_tmp = new PassMessage( string(PASSMESSAGE_COMMAND) + _rawNoCmd );
 	
     }else if(_skaar->isAliasFor(_command, USERMESSAGE_COMMAND){
+	/* Is used to set the username, hostname, servername and real name of the user */
 	_tmp = new UserMessage( string(USERMESSAGE_COMMAND) + _rawNoCmd );
 	
     }else if(_skaar->isAliasFor(_command, PRIVMSGMESSAGE_COMMAND){

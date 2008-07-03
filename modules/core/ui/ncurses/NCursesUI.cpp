@@ -3,38 +3,36 @@
 #include <limits.h>
 
 #include "VirtualUI.h"
+#include "UIException.h"
+#include <vector>
 
 using namespace std;
 
 class NCursesUI : public VirtualUI {
-
+private:
+    vector<VirtualChatWindow*> _windows;
+    VirtualChatWindow* _activeWindow;
+    
 public:
     NCursesUI(){
 	initscr();
     }
     
-    bool print(string line, bool error){
-	if(printw(line.c_str()) != OK){
-	    refresh();
-	    return false;
-	}
-	refresh();
-	return true;
+    VirtualChatWindow* activeWindow(){
+	return _activeWindow;
     }
     
-    bool printline(string line, bool error){
-	line.append("\n");
-	return print(line, error);
+    VirtualChatWindow* addNewWindow(){
+	return (VirtualChatWindow*)0;
     }
     
-    string readline(){
-	char str[LINE_MAX];
-	if(getstr(str) != OK){
-	    return NULL;
-	}else{
-	    return string(str);
+    VirtualchatWindow* setActive(int n){
+	if(_window.size() < (n -1)){
+	    throw UIException("The window you requested doesn't exist.");
 	}
+	return 
     }
+    
     
     void endUI(){
 	endwin();
@@ -48,7 +46,7 @@ extern "C" VirtualUI* create_ui(){
 }
 
 extern "C" void destroy_ui(VirtualUI* ui){
-    getch();
+    getch(); // jus for testing purposes to see the real output on the screen
     ( (NCursesUI*)ui)->endUI();
     delete ui;
 }

@@ -4,27 +4,27 @@
 #define IRC_MAX_LINE 512
 
 #include <string>
+#include "VirtualChatWindow.h"
 
+// XXX LINK THE VirtualChatWindow in the library
+// XXX WRITE CODE IN THE .cpp FILE
 using namespace std;
 
 class VirtualUI {
 
 public:
+    
+    virtual VirtualChatWindow* activeWindow() =0;
+    
+    virtual VirtualChatWindow* addNewWindow() =0;
+    
+    virtual VirtualChatWindow* setActive(int) =0;
+    
+    virtual bool destroyWindow(int) =0;
+    
+    virtual bool destroyWindow(VirtualCharWindow*) =0;
 
-    /*
-     * Prints the provided chars to the UI 
-     */
-    virtual bool 	print(string chars,  bool error) =0;
-    
-    /*
-     * Appends the newline character to the line, and prints the line.
-     */
-    virtual bool	printline(string ln, bool error) =0;
-    
-    /*
-     * Reads a line from the UIs' input
-     */
-    virtual string 	readline() =0;    
+    virtual char* readline() =0;    
 };
 
 typedef VirtualUI* create_ui_t();

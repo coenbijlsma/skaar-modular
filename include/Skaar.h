@@ -176,7 +176,7 @@ public:
      * for the provided command.
      */
     bool isAliasFor(string alias, string command);
-        
+    
 };
 
 #endif
