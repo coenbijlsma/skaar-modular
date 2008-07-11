@@ -2,32 +2,43 @@
 #include <string>
 
 #include "VirtualUI.h"
+#include "DefaultChatWindow.h"
 
 using namespace std;
 
 class DefaultUI : public VirtualUI {
-    
+private:
+    DefaultChatWindow* _chatWindow;
+        
 public:
-    DefaultUI(){}
-    
-    ~DefaultUI(){}
-    
-    bool print(string ln, bool error){
-	if(error){
-	    cerr << ln;
-	}else{
-	    cout << ln;
-	}
-	return true;
+    DefaultUI(){
+	_chatWindow = new DefaultChatWindow();
     }
     
-    bool printline(string ln, bool error){
-	ln.append("\n");
-	return print(ln, error);
+    virtual ~DefaultUI(){}
+    
+    VirtualChatWindow* activeWindow(){
+	return (VirtualChatWindow*)_chatWindow;
     }
     
-    string readline(){
-	string s;
+    VirtualChatWindow* addNewWindow()[
+	return (VirtualChatWindow*)_chatWindow;
+    }
+    
+    VirtualChatWindow* setActive(int active){
+	return (VirtualChatWindow*)_chatWindow;
+    }
+    
+    bool destroyWindow(int window){
+	return false;
+    }
+    
+    bool destroyWindow(VirtualChatWindow* window){
+	return false;	
+    }
+    
+    char* readline(){
+	char* s;    
 	getline(cin, s);
 	return s;
     }

@@ -14,6 +14,8 @@ class VirtualUI {
 
 public:
     
+    virtual ~VirtualUI();
+    
     virtual VirtualChatWindow* activeWindow() =0;
     
     virtual VirtualChatWindow* addNewWindow() =0;
